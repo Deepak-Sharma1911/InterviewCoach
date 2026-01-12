@@ -12,7 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\InterviewCoach.Application\InterviewCoach.Application.csproj" />
+    <ProjectReference Include="..\InterviewCoach.Infrastructure.Persistence\InterviewCoach.Infrastructure.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

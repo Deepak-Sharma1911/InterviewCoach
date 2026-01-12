@@ -10,4 +10,8 @@
     <Folder Include="Database\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\InterviewCoach.Application\InterviewCoach.Application.csproj" />
+  </ItemGroup>
+
 </Project>
