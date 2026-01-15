@@ -2,13 +2,13 @@
 {
     public interface IEntity
     {
-        public Guid CreatedBy { get; set; }
-        public DateTime? CreatedUtcDate { get; set; }
-        public Guid? LastModifiedBy { get; set; }
-        public DateTime LastUtcModified { get; set; }
+        Guid CreatedBy { get; }
+        DateTime? CreatedUtcDate { get; }
+        Guid? LastModifiedBy { get; }
+        DateTime LastUtcModified { get; }
     }
     public interface IEntity<T> : IEntity
     {
-        public T Id { get; set; }
+        public T Id { get;}
     }
 }

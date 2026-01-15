@@ -22,17 +22,20 @@ namespace InterviewCoach.Infrastructure.Persistence.Interceptors
             if (context == null)
                 return (flowControl: false, value: base.SavingChanges(eventData, result));
 
-            var entries = context.ChangeTracker.Entries<IEntity>().Where(e => e.Entity is IEntity && (e.State == Microsoft.EntityFrameworkCore.EntityState.Added || e.State == Microsoft.EntityFrameworkCore.EntityState.Modified || e.HasChangedOwnedEntities()));
+            var entries = context.ChangeTracker.Entries<IAuditableEntity>().Where(e =>
+                e.State == EntityState.Added ||
+                e.State == EntityState.Modified ||
+                e.HasChangedOwnedEntities());
 
             var utcNow = DateTime.UtcNow;
 
             foreach (var entry in entries)
             {
-                var entity = (IEntity)entry.Entity;
+                var entity = entry.Entity;
 
                 if (entry.State == EntityState.Added)
                 {
-                    entity.CreatedUtcDate = utcNow;
+                    entity.MarkCreated(utcNow);
                 }
                 foreach (PropertyEntry item in entry.Properties)
                 {
@@ -41,7 +44,7 @@ namespace InterviewCoach.Infrastructure.Persistence.Interceptors
                         Console.WriteLine($"Value changed from {item.OriginalValue} to {item.CurrentValue}");
                     }
                 }
-                entity.LastUtcModified = utcNow;
+                entity.MarkModified(utcNow);
             }
             return (flowControl: true, value: default);
         }
