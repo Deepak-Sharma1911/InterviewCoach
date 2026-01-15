@@ -1,19 +1,27 @@
-﻿using InterviewCoach.Infrastructure.Persistence.Database.Entities;
+﻿using InterviewCoach.Application.Abstractions;
+using InterviewCoach.Infrastructure.Persistence.Database.Entities;
+using InterviewCoach.Infrastructure.Persistence.Identity;
 using InterviewCoach.Infrastructure.Persistence.Interceptors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
 
 namespace InterviewCoach.Infrastructure.Persistence
 {
     public static class ServiceExtension
     {
-        public static void ConfigurePersistenceService(this IServiceCollection services, string DbConnectionString)
+        public static IServiceCollection ConfigurePersistenceService(this IServiceCollection services, IConfiguration configuration)
         {
+
+            services.AddScoped<ISaveChangesInterceptor, AuditEntityInterceptors>();
+
             services.AddDbContext<ApplicationContext>((builder, options) =>
             {
                 options.AddInterceptors(builder.GetService<ISaveChangesInterceptor>()!);
-                options.UseSqlServer(DbConnectionString, builder =>
+                options.UseSqlServer(configuration.GetConnectionString(""), builder =>
                 {
                     builder.EnableRetryOnFailure(
                            maxRetryCount: 5,
@@ -24,8 +32,7 @@ namespace InterviewCoach.Infrastructure.Persistence
                 }).EnableDetailedErrors()
                   .EnableSensitiveDataLogging();
             });
-
-            services.AddScoped<ISaveChangesInterceptor, AuditEntityInterceptors>();
+            return services;
         }
     }
 }

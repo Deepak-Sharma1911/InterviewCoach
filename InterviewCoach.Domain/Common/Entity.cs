@@ -10,28 +10,21 @@ namespace InterviewCoach.Domain.Common
         public Guid? LastModifiedBy { get; protected set; }
         public DateTime LastUtcModified { get; protected set; }
 
-        public void MarkCreated(DateTime utcNow)
+        public void MarkCreated(Guid user, DateTime utcNow)
         {
+            CreatedBy = user;
             CreatedUtcDate = utcNow;
             LastUtcModified = utcNow;
         }
 
-        public void MarkModified(DateTime utcNow)
+        public void MarkModified(Guid user, DateTime utcNow)
         {
             LastUtcModified = utcNow;
+            LastModifiedBy = user;
         }
+        protected void SetCreated(Guid createdBy, DateTime utcNow) => MarkCreated(createdBy, utcNow);
+        protected void SetModified(Guid modifiedBy, DateTime utcNow) => MarkModified(modifiedBy, utcNow);
 
-        protected void SetCreated(Guid createdBy, DateTime utcNow)
-        {
-            CreatedBy = createdBy;
-            MarkCreated(utcNow);
-        }
-
-        protected void SetModified(Guid modifiedBy, DateTime utcNow)
-        {
-            LastModifiedBy = modifiedBy;
-            MarkModified(utcNow);
-        }
     }
 
 }

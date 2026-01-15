@@ -8,7 +8,7 @@ namespace InterviewCoach.Domain.Contracts
 {
     public interface IAuditableEntity
     {
-        void MarkCreated(DateTime utcNow);
-        void MarkModified(DateTime utcNow);
+        void MarkCreated(Guid userId, DateTime utcNow);
+        void MarkModified(Guid userId, DateTime utcNow);
     }
 }

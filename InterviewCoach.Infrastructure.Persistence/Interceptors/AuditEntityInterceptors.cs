@@ -1,4 +1,5 @@
-﻿using InterviewCoach.Domain.Contracts;
+﻿using InterviewCoach.Application.Abstractions;
+using InterviewCoach.Domain.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -7,6 +8,11 @@ namespace InterviewCoach.Infrastructure.Persistence.Interceptors
 {
     public class AuditEntityInterceptors : SaveChangesInterceptor
     {
+        private readonly ICurrentUser _currentUser;
+        public AuditEntityInterceptors(ICurrentUser currentUser)
+        {
+            _currentUser = currentUser;
+        }
         override public InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
         {
             (bool flowControl, InterceptionResult<int> value) = ProcessAuditEntitiesBeforeSave(eventData, result);
@@ -15,6 +21,15 @@ namespace InterviewCoach.Infrastructure.Persistence.Interceptors
                 return value;
             }
             return base.SavingChanges(eventData, result);
+        }
+        override public ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
+        {
+            (bool flowControl, InterceptionResult<int> value) = ProcessAuditEntitiesBeforeSave(eventData, result);
+            if (!flowControl)
+            {
+                return new ValueTask<InterceptionResult<int>>(value);
+            }
+            return base.SavingChangesAsync(eventData, result, cancellationToken);
         }
         private (bool flowControl, InterceptionResult<int> value) ProcessAuditEntitiesBeforeSave(DbContextEventData eventData, InterceptionResult<int> result)
         {
@@ -27,15 +42,13 @@ namespace InterviewCoach.Infrastructure.Persistence.Interceptors
                 e.State == EntityState.Modified ||
                 e.HasChangedOwnedEntities());
 
-            var utcNow = DateTime.UtcNow;
-
             foreach (var entry in entries)
             {
                 var entity = entry.Entity;
 
                 if (entry.State == EntityState.Added)
                 {
-                    entity.MarkCreated(utcNow);
+                    entity.MarkCreated(_currentUser.UserId, DateTime.UtcNow);
                 }
                 foreach (PropertyEntry item in entry.Properties)
                 {
@@ -44,20 +57,11 @@ namespace InterviewCoach.Infrastructure.Persistence.Interceptors
                         Console.WriteLine($"Value changed from {item.OriginalValue} to {item.CurrentValue}");
                     }
                 }
-                entity.MarkModified(utcNow);
+                entity.MarkModified(_currentUser.UserId, DateTime.UtcNow);
             }
             return (flowControl: true, value: default);
         }
 
-        override public ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
-        {
-            (bool flowControl, InterceptionResult<int> value) = ProcessAuditEntitiesBeforeSave(eventData, result);
-            if (!flowControl)
-            {
-                return new ValueTask<InterceptionResult<int>>(value);
-            }
-            return base.SavingChangesAsync(eventData, result, cancellationToken);
-        }
     }
     public static class EntityEntryExtensions
     {
