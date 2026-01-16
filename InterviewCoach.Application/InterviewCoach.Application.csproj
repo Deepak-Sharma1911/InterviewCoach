@@ -13,7 +13,6 @@
     <ProjectReference Include="..\InterviewCoach.Domain\InterviewCoach.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Feature\Page\" />
     <Folder Include="Feature\Topic\GetTopicTree\" />
   </ItemGroup>
 

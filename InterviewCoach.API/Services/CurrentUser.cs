@@ -1,7 +1,7 @@
 ﻿using InterviewCoach.Application.Abstractions;
 using System.Security.Claims;
 
-namespace InterviewCoach.API.Identity
+namespace InterviewCoach.API.Services
 {
     public class CurrentUser : ICurrentUser
     {
