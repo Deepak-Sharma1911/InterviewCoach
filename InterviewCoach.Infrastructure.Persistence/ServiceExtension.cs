@@ -1,8 +1,5 @@
-﻿using InterviewCoach.Application.Abstractions;
-using InterviewCoach.Infrastructure.Persistence.Database.Entities;
-using InterviewCoach.Infrastructure.Persistence.Identity;
+﻿using InterviewCoach.Infrastructure.Persistence.Database;
 using InterviewCoach.Infrastructure.Persistence.Interceptors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;

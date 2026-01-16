@@ -15,7 +15,7 @@ namespace InterviewCoach.Domain.Entities
 
         public IReadOnlyCollection<Topic> Children => _children.AsReadOnly();
 
-        private Topic() { } // EF rehydration
+        private Topic() { } // For rehydration
 
         public static Topic CreateRoot(
             string title,
@@ -26,21 +26,21 @@ namespace InterviewCoach.Domain.Entities
         {
             Validate(title, slug);
 
-            var topic = new Topic
+            return new Topic
             {
                 Id = Guid.NewGuid(),
                 Title = title,
                 Slug = slug,
                 DisplayOrder = displayOrder,
-                IsActive = true
+                IsActive = true,
+                CreatedBy = createdBy,
+                CreatedUtcDate = utcNow,
+                LastUtcModified = utcNow
             };
-
-            topic.SetCreated(createdBy, utcNow);
-            return topic;
         }
 
         public static Topic CreateChild(
-            Guid parentTopicId,
+            Guid parentId,
             string title,
             string slug,
             int displayOrder,
@@ -49,24 +49,24 @@ namespace InterviewCoach.Domain.Entities
         {
             Validate(title, slug);
 
-            var topic = new Topic
+            return new Topic
             {
                 Id = Guid.NewGuid(),
-                ParentTopicId = parentTopicId,
+                ParentTopicId = parentId,
                 Title = title,
                 Slug = slug,
                 DisplayOrder = displayOrder,
-                IsActive = true
+                IsActive = true,
+                CreatedBy = createdBy,
+                CreatedUtcDate = utcNow,
+                LastUtcModified = utcNow
             };
-
-            topic.SetCreated(createdBy, utcNow);
-            return topic;
         }
 
         public void Deactivate(Guid modifiedBy, DateTime utcNow)
         {
             if (!IsActive)
-                return;
+                throw new DomainException("Topic is already inactive.");
 
             IsActive = false;
             SetModified(modifiedBy, utcNow);
@@ -83,4 +83,6 @@ namespace InterviewCoach.Domain.Entities
     }
 
 }
+
+
 
