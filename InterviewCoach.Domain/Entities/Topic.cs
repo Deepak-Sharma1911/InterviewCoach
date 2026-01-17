@@ -6,15 +6,12 @@ namespace InterviewCoach.Domain.Entities
     public sealed class Topic : Entity<Guid>
     {
         private readonly List<Topic> _children = new();
-
         public string Title { get; private set; } = null!;
         public string Slug { get; private set; } = null!;
         public Guid? ParentTopicId { get; private set; }
         public int DisplayOrder { get; private set; }
         public bool IsActive { get; private set; }
-
         public IReadOnlyCollection<Topic> Children => _children.AsReadOnly();
-
         private Topic() { } // For rehydration
 
         public static Topic CreateRoot(

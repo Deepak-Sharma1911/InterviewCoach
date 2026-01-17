@@ -3,7 +3,7 @@
     public interface IEntity
     {
         Guid CreatedBy { get; }
-        DateTime? CreatedUtcDate { get; }
+        DateTime CreatedUtcDate { get; }
         Guid? LastModifiedBy { get; }
         DateTime LastUtcModified { get; }
     }

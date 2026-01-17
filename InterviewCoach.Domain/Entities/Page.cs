@@ -7,15 +7,12 @@ namespace InterviewCoach.Domain.Entities
     public sealed class Page : Entity<Guid>
     {
         private readonly List<PageSection> _sections = new();
-
         public Guid TopicId { get; private set; }
         public string Title { get; private set; } = null!;
         public string Slug { get; private set; } = null!;
         public string? Summary { get; private set; }
         public bool IsPublished { get; private set; }
-
         public IReadOnlyCollection<PageSection> Sections => _sections.AsReadOnly();
-
         private Page() { } // EF rehydration
 
         public static Page Create(

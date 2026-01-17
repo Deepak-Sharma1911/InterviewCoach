@@ -23,8 +23,5 @@
 	<ItemGroup>
 		<ProjectReference Include="..\InterviewCoach.Application\InterviewCoach.Application.csproj" />
 	</ItemGroup>
-	<ItemGroup>
-		<Folder Include="Mappings\" />
-	</ItemGroup>
 
 </Project>

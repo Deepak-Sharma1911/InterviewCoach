@@ -6,7 +6,7 @@ namespace InterviewCoach.Domain.Common
     {
         public T Id { get; protected set; } = default!;
         public Guid CreatedBy { get; protected set; }
-        public DateTime? CreatedUtcDate { get; protected set; }
+        public DateTime CreatedUtcDate { get; protected set; }
         public Guid? LastModifiedBy { get; protected set; }
         public DateTime LastUtcModified { get; protected set; }
 
