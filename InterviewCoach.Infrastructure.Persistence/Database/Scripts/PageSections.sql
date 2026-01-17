@@ -1,0 +1,29 @@
+CREATE TABLE PageSections
+(
+    Id UNIQUEIDENTIFIER NOT NULL
+        CONSTRAINT PK_PageSections PRIMARY KEY
+        DEFAULT NEWID(),
+    PageId UNIQUEIDENTIFIER NOT NULL,
+    SectionType INT NOT NULL,
+    Title NVARCHAR(200) NOT NULL,
+    Content NVARCHAR(MAX) NOT NULL,
+    DisplayOrder INT NOT NULL DEFAULT 0,
+    CreatedBy UNIQUEIDENTIFIER NOT NULL,
+    CreatedUtcDate DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
+    LastModifiedBy UNIQUEIDENTIFIER NULL,
+    LastUtcModified DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);
+
+ALTER TABLE PageSections
+ADD CONSTRAINT FK_PageSections_Pages
+FOREIGN KEY (PageId)
+REFERENCES Pages(Id)
+ON DELETE CASCADE;
+
+ALTER TABLE PageSections
+ADD CONSTRAINT FK_PageSections_SectionTypes
+FOREIGN KEY (SectionType)
+REFERENCES PageSectionTypes(Id);
+
+CREATE INDEX IX_PageSections_Page_Display
+ON PageSections(PageId, DisplayOrder);
