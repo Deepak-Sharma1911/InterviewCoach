@@ -7,15 +7,15 @@ namespace InterviewCoach.Domain.Entities
     public sealed class Page : Entity<Guid>
     {
         private readonly List<PageSection> _sections = new();
+
         public Guid TopicId { get; private set; }
         public string Title { get; private set; } = null!;
         public string Slug { get; private set; } = null!;
         public string? Summary { get; private set; }
         public bool IsPublished { get; private set; }
         public IReadOnlyCollection<PageSection> Sections => _sections.AsReadOnly();
-        private Page() { } // EF rehydration
-
-        public static Page Create(
+        private Page() { }
+        internal static Page Create(
             Guid topicId,
             string title,
             string slug,
@@ -55,13 +55,7 @@ namespace InterviewCoach.Domain.Entities
                 throw new DomainException("Cannot modify a published page.");
 
             var section = PageSection.Create(
-                Id,
-                type,
-                title,
-                content,
-                displayOrder,
-                modifiedBy,
-                utcNow);
+                Id, type, title, content, displayOrder, modifiedBy, utcNow);
 
             _sections.Add(section);
             SetModified(modifiedBy, utcNow);
@@ -69,15 +63,13 @@ namespace InterviewCoach.Domain.Entities
 
         public void Publish(Guid modifiedBy, DateTime utcNow)
         {
-            if (IsPublished)
-                throw new DomainException("Page is already published.");
-
             if (!_sections.Any())
-                throw new DomainException("Cannot publish a page without sections.");
+                throw new DomainException("Cannot publish page without sections.");
 
             IsPublished = true;
             SetModified(modifiedBy, utcNow);
         }
     }
+
 }
 

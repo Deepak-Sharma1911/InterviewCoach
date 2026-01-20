@@ -9,16 +9,13 @@ namespace InterviewCoach.Application.Feature.Topic.CreateChildTopic
      : IRequestHandler<CreateChildTopicCommand, Guid>
     {
         private readonly ITopicRepository _repository;
-        private readonly IUnitOfWork _uow;
         private readonly ICurrentUser _currentUser;
 
         public CreateChildTopicHandler(
             ITopicRepository repository,
-            IUnitOfWork uow,
             ICurrentUser currentUser)
         {
             _repository = repository;
-            _uow = uow;
             _currentUser = currentUser;
         }
 
@@ -41,7 +38,6 @@ namespace InterviewCoach.Application.Feature.Topic.CreateChildTopic
                 DateTime.UtcNow);
 
             await _repository.AddAsync(topic, cancellationToken);
-            await _uow.SaveChangesAsync(cancellationToken);
 
             return topic.Id!;
         }

@@ -1,13 +1,9 @@
-﻿using InterviewCoach.Application.Abstractions;
-using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
 
 namespace InterviewCoach.Application.Feature.Topic.CreateTopicRoot
 {
-    public sealed record CreateRootTopicCommand(string Title, string Slug, int DisplayOrder) : ICommand<Guid>;
+    public sealed record CreateTopicCommand(string Title, string Slug, int DisplayOrder, Guid? ParentTopicId) : IRequest<CreateTopicResult>;
+
+    public sealed record CreateTopicResult(Guid Id, string Title, string Slug);
 
 }
