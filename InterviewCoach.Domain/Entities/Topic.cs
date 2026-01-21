@@ -5,68 +5,56 @@ namespace InterviewCoach.Domain.Entities
 {
     public sealed class Topic : Entity<Guid>
     {
-        private readonly List<Topic> _children = new();
+        private readonly List<Page> _pages = new();
+        public Guid? ParentTopicId { get; private set; }
         public string Title { get; private set; } = null!;
         public string Slug { get; private set; } = null!;
-        public Guid? ParentTopicId { get; private set; }
         public int DisplayOrder { get; private set; }
         public bool IsActive { get; private set; }
-        public IReadOnlyCollection<Topic> Children => _children.AsReadOnly();
-        private Topic() { } // For rehydration
-
-        public static Topic CreateRoot(
+        public IReadOnlyCollection<Page> Pages => _pages.AsReadOnly();
+        private Topic() { }
+        public static Topic Create(
             string title,
             string slug,
             int displayOrder,
+            Guid? parentTopicId,
             Guid createdBy,
             DateTime utcNow)
         {
             Validate(title, slug);
 
-            return new Topic
+            var topic = new Topic
             {
                 Id = Guid.NewGuid(),
                 Title = title,
                 Slug = slug,
                 DisplayOrder = displayOrder,
-                IsActive = true,
-                CreatedBy = createdBy,
-                CreatedUtcDate = utcNow,
-                LastUtcModified = utcNow
+                ParentTopicId = parentTopicId,
+                IsActive = true
             };
+
+            topic.SetCreated(createdBy, utcNow);
+            return topic;
         }
 
-        public static Topic CreateChild(
-            Guid parentId,
+        public Page AddPage(
             string title,
             string slug,
-            int displayOrder,
+            string? summary,
             Guid createdBy,
             DateTime utcNow)
-        {
-            Validate(title, slug);
-
-            return new Topic
-            {
-                Id = Guid.NewGuid(),
-                ParentTopicId = parentId,
-                Title = title,
-                Slug = slug,
-                DisplayOrder = displayOrder,
-                IsActive = true,
-                CreatedBy = createdBy,
-                CreatedUtcDate = utcNow,
-                LastUtcModified = utcNow
-            };
-        }
-
-        public void Deactivate(Guid modifiedBy, DateTime utcNow)
         {
             if (!IsActive)
-                throw new DomainException("Topic is already inactive.");
+                throw new DomainException("Cannot add page to inactive topic.");
 
-            IsActive = false;
-            SetModified(modifiedBy, utcNow);
+            if (_pages.Any(p => p.Slug == slug))
+                throw new DomainException("Duplicate page slug.");
+
+            var page = Page.Create(Id, title, slug, summary, createdBy, utcNow);
+            _pages.Add(page);
+
+            SetModified(createdBy, utcNow);
+            return page;
         }
 
         private static void Validate(string title, string slug)
@@ -78,7 +66,6 @@ namespace InterviewCoach.Domain.Entities
                 throw new DomainException("Topic slug is required.");
         }
     }
-
 }
 
 

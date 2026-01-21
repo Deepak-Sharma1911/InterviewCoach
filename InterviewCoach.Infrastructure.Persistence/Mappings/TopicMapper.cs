@@ -24,10 +24,10 @@ namespace InterviewCoach.Infrastructure.Persistence.Mappings
 
         public static Domain.Entities.Topic ToDomainTopic(this Topic entityTopic)
         {
-            var domainTopic = Domain.Entities.Topic.CreateRoot(
-                title: entityTopic.Title,
+            var domainTopic = Domain.Entities.Topic.Create(entityTopic.Title,
                 slug: entityTopic.Slug,
                 displayOrder: entityTopic.DisplayOrder,
+                parentTopicId: entityTopic.ParentTopicId,
                 createdBy: entityTopic.CreatedBy,
                 utcNow: entityTopic.CreatedUtcDate);
             // Manually set properties that are not set by the factory method
