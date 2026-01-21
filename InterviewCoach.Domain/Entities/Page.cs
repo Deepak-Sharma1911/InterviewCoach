@@ -1,5 +1,4 @@
 ﻿using InterviewCoach.Domain.Common;
-using InterviewCoach.Domain.Entities;
 using InterviewCoach.Domain.Exceptions;
 
 namespace InterviewCoach.Domain.Entities
