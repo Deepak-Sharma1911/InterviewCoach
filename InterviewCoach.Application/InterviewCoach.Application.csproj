@@ -1,19 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MediatR" Version="14.0.0" />
+		<PackageReference Include="MediatR"/>
 	</ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\InterviewCoach.Domain\InterviewCoach.Domain.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Feature\Topic\GetTopicRootTree\" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\InterviewCoach.Domain\InterviewCoach.Domain.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<Folder Include="Feature\Topic\GetTopicRootTree\" />
+	</ItemGroup>
 
 </Project>
