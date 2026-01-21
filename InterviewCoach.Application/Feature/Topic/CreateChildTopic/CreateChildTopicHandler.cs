@@ -23,23 +23,7 @@ namespace InterviewCoach.Application.Feature.Topic.CreateChildTopic
             CreateChildTopicCommand request,
             CancellationToken cancellationToken)
         {
-            var parent = await _repository.GetByIdAsync(
-                request.ParentTopicId, cancellationToken);
-
-            if (parent is null)
-                throw new DomainException("Parent topic not found.");
-
-            var topic = RootTopicDomain.Topic.CreateChild(
-                request.ParentTopicId,
-                request.Title,
-                request.Slug,
-                request.DisplayOrder,
-                _currentUser.UserId!,
-                DateTime.UtcNow);
-
-            await _repository.AddAsync(topic, cancellationToken);
-
-            return topic.Id!;
+            throw new NotImplementedException();
         }
     }
 

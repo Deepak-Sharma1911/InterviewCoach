@@ -1,5 +1,6 @@
 ﻿using InterviewCoach.Application.Abstractions;
 using InterviewCoach.Domain.Exceptions;
+using TopicRootEntity = InterviewCoach.Domain.Entities;
 
 namespace InterviewCoach.Application.Feature.Topic.CreateTopicRoot
 {
@@ -19,21 +20,16 @@ namespace InterviewCoach.Application.Feature.Topic.CreateTopicRoot
         {
             if (await _repository.SlugExistsAsync(request.Slug, cancellationToken))
                 throw new DomainException("Topic slug already exists.");
-
-            var topic = Topic.Create(
-             request.Title,
-             request.Slug,
-             request.DisplayOrder,
-             request.ParentTopicId,
-             _currentUser.UserId,
-             _clock.UtcNow);
-
+            TopicRootEntity.Topic topic = TopicRootEntity.Topic.Create(
+                                  title: request.Title,
+                                  slug: request.Slug,
+                                  displayOrder: request.DisplayOrder,
+                                  parentTopicId: null,
+                                  createdBy: _currentUser.UserId,
+                                  utcNow: _clock.UtcNow
+                                  );
             await _repository.AddAsync(topic, cancellationToken);
-
-            return new CreateTopicResult(
-                topic.Id,
-                topic.Title,
-                topic.Slug);
+            return new CreateTopicResult(topic.Id, topic.Title, topic.Slug);
         }
     }
 }
