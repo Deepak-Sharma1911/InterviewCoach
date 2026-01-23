@@ -1,5 +1,7 @@
-﻿using System.Reflection;
+﻿using FluentValidation;
+using InterviewCoach.Application.Behaviors;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace InterviewCoach.Application
 {
@@ -11,7 +13,10 @@ namespace InterviewCoach.Application
             {
                 config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
                 config.AddOpenBehavior(typeof(Behavious.UnitOfWorkBehavior<,>));
+                config.AddOpenBehavior(typeof(ValidationBehavior<,>));
             });
+
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }

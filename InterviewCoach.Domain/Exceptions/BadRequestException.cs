@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace InterviewCoach.Domain.Exceptions
 {
-    public class DomainException : BaseException
+    public class BadRequestException : BaseException
     {
-        public DomainException(string message) : base(message)
+        public BadRequestException(string message) : base(message)
         {
         }
     }
