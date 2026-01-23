@@ -3,6 +3,7 @@
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>
 	<ItemGroup>
+	      <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.17.0.131074" />
 		<PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageVersion Include="Serilog" Version="4.1.0" />
 		<PackageVersion Include="Polly" Version="8.5.0" />
@@ -14,7 +15,6 @@
 		<PackageVersion Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
 		<PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.0"/>
 		<PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0"/>
-		<GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="10.3.0.106239" />
 		<PackageVersion Include="FluentValidation" Version="10.0.4" />
 		<PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="10.0.4" />
 	</ItemGroup>
