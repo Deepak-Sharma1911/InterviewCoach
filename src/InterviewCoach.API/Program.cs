@@ -1,3 +1,4 @@
+using InterviewCoach.API.Extensions;
 using InterviewCoach.API.Services;
 using InterviewCoach.Application.Abstractions;
 
@@ -8,12 +9,18 @@ namespace InterviewCoach.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
             builder.Services.AddControllers();
+
             builder.Services.AddEndpointsApiExplorer();
+
             builder.Services.AddSwaggerGen();
+
             builder.Services.AddHttpContextAccessor();
+
             builder.Services.AddScoped<ICurrentUser, CurrentUser>();
-            var app = builder.Build();
+
+            WebApplication app = builder.Build();
 
 
             if (app.Environment.IsDevelopment())
@@ -21,9 +28,14 @@ namespace InterviewCoach.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseRequestContextLogging();
+
             app.UseHttpsRedirection();
+
             app.UseAuthorization();
+
             app.MapControllers();
+
             app.Run();
         }
     }
