@@ -1,6 +1,7 @@
 using InterviewCoach.API.Extensions;
 using InterviewCoach.API.Services;
 using InterviewCoach.Application.Abstractions;
+using Serilog;
 
 namespace InterviewCoach.API
 {
@@ -10,15 +11,14 @@ namespace InterviewCoach.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllers();
-
-            builder.Services.AddEndpointsApiExplorer();
-
-            builder.Services.AddSwaggerGen();
-
-            builder.Services.AddHttpContextAccessor();
-
-            builder.Services.AddScoped<ICurrentUser, CurrentUser>();
+            builder.Host.UseSerilog((context, services, configuration) =>
+            {
+                configuration
+                    .ReadFrom.Configuration(context.Configuration)
+                    .ReadFrom.Services(services)
+                    .Enrich.FromLogContext();
+            });
+            builder.Services.AddPresentation();
 
             WebApplication app = builder.Build();
 
