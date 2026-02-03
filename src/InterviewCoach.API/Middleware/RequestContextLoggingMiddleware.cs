@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Primitives;
+using Serilog.Context;
 
 namespace InterviewCoach.API.Middleware
 {

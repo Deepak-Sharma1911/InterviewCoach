@@ -3,15 +3,20 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InterviewCoach.API.Infrastructure
 {
-    internal sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
-    : IExceptionHandler
+    internal sealed class GlobalExceptionHandler : IExceptionHandler
     {
+        private readonly ILogger<GlobalExceptionHandler> _logger;
+
+        public GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
+        {
+            _logger = logger;
+        }
         public async ValueTask<bool> TryHandleAsync(
             HttpContext httpContext,
             Exception exception,
             CancellationToken cancellationToken)
         {
-            logger.LogError(exception, "Unhandled exception occurred");
+            _logger.LogError(exception, "Unhandled exception occurred");
 
             var problemDetails = new ProblemDetails
             {
