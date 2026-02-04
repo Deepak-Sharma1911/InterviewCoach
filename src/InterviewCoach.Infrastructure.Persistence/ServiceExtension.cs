@@ -5,14 +5,12 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-
 namespace InterviewCoach.Infrastructure.Persistence
 {
     public static class ServiceExtension
     {
-        public static IServiceCollection ConfigurePersistenceService(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddPersistenceService(this IServiceCollection services, IConfiguration configuration)
         {
-
             services.AddScoped<ISaveChangesInterceptor, AuditEntityInterceptors>();
 
             services.AddDbContext<ApplicationContext>((builder, options) =>

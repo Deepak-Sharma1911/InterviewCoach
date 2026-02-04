@@ -7,7 +7,7 @@ namespace InterviewCoach.Application
 {
     public static class ServiceExtension
     {
-        public static void ConfigureApplicationService(this IServiceCollection services)
+        public static void AddApplicationServices(this IServiceCollection services)
         {
             services.AddMediatR(config =>
             {

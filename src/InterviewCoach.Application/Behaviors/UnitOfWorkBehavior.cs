@@ -5,7 +5,6 @@ namespace InterviewCoach.Application.Behavious
 {
     internal class UnitOfWorkBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
     {
-
         private readonly IUnitOfWork _unitOfWork;
         public UnitOfWorkBehavior(IUnitOfWork unitOfWork)
         {

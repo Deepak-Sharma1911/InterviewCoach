@@ -1,16 +1,16 @@
 using InterviewCoach.API.Extensions;
-using InterviewCoach.API.Services;
-using InterviewCoach.Application.Abstractions;
+using InterviewCoach.Application;
+using InterviewCoach.Infrastructure.Persistence;
 using Serilog;
+
 
 namespace InterviewCoach.API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public async static Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
             builder.Host.UseSerilog((context, services, configuration) =>
             {
                 configuration
@@ -19,24 +19,34 @@ namespace InterviewCoach.API
                     .Enrich.FromLogContext();
             });
             builder.Services.AddPresentation();
+            builder.Services.AddApplicationServices();
+            builder.Services.AddPersistenceService(builder.Configuration);
 
             WebApplication app = builder.Build();
 
 
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerWithUI();
+                app.UseDeveloperExceptionPage();
             }
-            app.UseRequestContextLogging();
+            app.UseHsts();
 
             app.UseHttpsRedirection();
+
+            app.UseRequestContextLogging();
+
+            app.UseSerilogRequestLogging();
+
+            app.UseExceptionHandler();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
             app.MapControllers();
 
-            app.Run();
+            await app.RunAsync();
         }
     }
 }
