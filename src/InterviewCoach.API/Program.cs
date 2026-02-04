@@ -1,6 +1,8 @@
 using InterviewCoach.API.Extensions;
 using InterviewCoach.API.Services;
+using InterviewCoach.Application;
 using InterviewCoach.Application.Abstractions;
+using InterviewCoach.Infrastructure.Persistence;
 using Serilog;
 
 namespace InterviewCoach.API
@@ -19,6 +21,8 @@ namespace InterviewCoach.API
                     .Enrich.FromLogContext();
             });
             builder.Services.AddPresentation();
+            builder.Services.AddApplicationServices();
+            builder.Services.AddPersistenceService(builder.Configuration);
 
             WebApplication app = builder.Build();
 
