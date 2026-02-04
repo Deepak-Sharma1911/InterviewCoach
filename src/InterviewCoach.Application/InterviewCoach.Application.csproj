@@ -5,9 +5,6 @@
 		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
 	</ItemGroup>
 	<ItemGroup>
-		<Folder Include="Feature\Topic\GetTopicRootTree\" />
-	</ItemGroup>
-	<ItemGroup>
 	  <ProjectReference Include="..\InterviewCoach.Domain\InterviewCoach.Domain.csproj" />
 	</ItemGroup>
 

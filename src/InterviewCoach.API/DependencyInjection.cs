@@ -10,11 +10,15 @@ namespace InterviewCoach.API
         {
             services.AddHttpContextAccessor();
             services.AddScoped<ICurrentUser, CurrentUser>();
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
             services.AddControllers();
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
+            return services;
+        }
+        public static IServiceCollection AddSwaggerGenWithAuth(this IServiceCollection services)
+        {
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
             return services;
         }
     }
