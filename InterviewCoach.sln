@@ -22,11 +22,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6CB2DA79-BDCE-49F7-97C8-785EEB4D385D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterviewCoach.Infrastructure.Persistence.Test", "InterviewCoach.Infrastructure.Persistence.Test\InterviewCoach.Infrastructure.Persistence.Test.csproj", "{8C1B55EA-F1EF-49DF-B890-2A32AEB8F597}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterviewCoach.Infrastructure.Persistence.Test", "tests\InterviewCoach.Infrastructure.Persistence.Test\InterviewCoach.Infrastructure.Persistence.Test.csproj", "{8C1B55EA-F1EF-49DF-B890-2A32AEB8F597}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterviewCoach.Domain.Test", "InterviewCoach.Domain.Test\InterviewCoach.Domain.Test.csproj", "{557DD3C2-690D-4A87-801F-D5E1AE5223CE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterviewCoach.Domain.Test", "tests\InterviewCoach.Domain.Test\InterviewCoach.Domain.Test.csproj", "{557DD3C2-690D-4A87-801F-D5E1AE5223CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterviewCoach.Application.Test", "InterviewCoach.Application.Test\InterviewCoach.Application.Test.csproj", "{B6DE89B8-3D33-4086-99D8-69048A68F1FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterviewCoach.Application.Test", "tests\InterviewCoach.Application.Test\InterviewCoach.Application.Test.csproj", "{B6DE89B8-3D33-4086-99D8-69048A68F1FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
