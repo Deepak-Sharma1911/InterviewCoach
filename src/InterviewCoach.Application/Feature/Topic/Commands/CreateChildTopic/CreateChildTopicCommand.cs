@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace InterviewCoach.Application.Feature.Topic.Commands.CreateChildTopic
 {
-    internal class CreateChildTopicCommand
+    public record CreateChildTopicCommand(Guid ParentTopicId, string Name, string Description) : IRequest<Guid>
     {
+
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace InterviewCoach.Infrastructure.Persistence.Database.Entities;
+﻿namespace InterviewCoach.Infrastructure.Persistence.Database.Entities;
 
 public partial class Page
 {

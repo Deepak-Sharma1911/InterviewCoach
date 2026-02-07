@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace InterviewCoach.Application.Feature.Topic.Queries.GetTopicById
+﻿namespace InterviewCoach.Application.Feature.Topic.Queries.GetTopicById
 {
-    internal class GetTopicByIdQuery
-    {
-    }
+    public record GetTopicByIdQuery(Guid TopicId) : IQuery<TopicDomain.Topic>;
+
 }

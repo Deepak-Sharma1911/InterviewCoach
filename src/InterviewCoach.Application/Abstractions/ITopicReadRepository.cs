@@ -2,7 +2,7 @@
 {
     public interface ITopicReadRepository
     {
-        Task<IReadOnlyList<TopicTreeNodeDto>> GetRootTreeAsync(CancellationToken ct);
-        Task<TopicDto?> GetByIdAsync(Guid id, CancellationToken ct);
+        Task<IReadOnlyList<TopicDomain.Topic>> GetRootTreeAsync(CancellationToken ct);
+        Task<TopicDomain.Topic> GetByIdAsync(Guid id, CancellationToken ct);
     }
 }
