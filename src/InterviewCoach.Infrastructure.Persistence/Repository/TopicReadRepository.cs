@@ -1,7 +1,6 @@
-﻿using InterviewCoach.Infrastructure.Persistence.Database;
-using InterviewCoach.Infrastructure.Persistence.Mappings;
+﻿using InterviewCoach.Application.Feature.Topic.ReadModels;
+using InterviewCoach.Infrastructure.Persistence.Database;
 using Microsoft.Extensions.Logging;
-using Topic = InterviewCoach.Infrastructure.Persistence.Database.Entities.Topic;
 
 namespace InterviewCoach.Infrastructure.Persistence.Repository
 {
@@ -13,9 +12,8 @@ namespace InterviewCoach.Infrastructure.Persistence.Repository
         {
             _logger = logger;
             _context = context;
-
         }
-        public async Task<TopicDomain.Topic> GetByIdAsync(Guid id, CancellationToken ct)
+        public async Task<TopicDetailsDto> GetByIdAsync(Guid id, CancellationToken ct)
         {
             _logger.LogInformation("Getting topic by id: {Id}", id);
             if (id == Guid.Empty)
@@ -23,21 +21,47 @@ namespace InterviewCoach.Infrastructure.Persistence.Repository
                 _logger.LogWarning("Invalid topic id: {Id}", id);
                 throw new ArgumentException("Id cannot be empty", nameof(id));
             }
-            Topic topic = await _context.Topics.FirstOrDefaultAsync(t => t.Id == id, ct);
-            return topic.ToDomainTopic();
-
+            return await _context.Topics
+                                 .Where(t => t.Id == id)
+                                 .Select(t => new TopicDetailsDto
+                                 {
+                                     Id = t.Id,
+                                     Title = t.Title,
+                                     Slug = t.Slug,
+                                     IsActive = t.IsActive ?? true,
+                                     Pages = t.Pages
+                                         .Select(p => new PageDto
+                                         {
+                                             Id = p.Id,
+                                             Title = p.Title,
+                                             Slug = p.Slug,
+                                             IsPublished = p.IsPublished
+                                         })
+                                         .ToList()
+                                 }).FirstOrDefaultAsync(ct);
         }
 
-        public async Task<IReadOnlyList<TopicDomain.Topic>> GetRootTreeAsync(CancellationToken ct)
+        public async Task<IReadOnlyList<TopicTreeItem>> GetRootTreeAsync(CancellationToken ct)
         {
             _logger.LogInformation("Getting topic root tree");
-            var topicEntities = await _context.Topics
-                                        .Where(t => t.ParentTopicId == null && t.IsActive == true)
-                                        .OrderBy(t => t.DisplayOrder)
-                                        .ToListAsync(ct);
-
-            var domainTopics = topicEntities.Select(te => te.ToDomainTopic()).ToList();
-            return domainTopics;
+            return await _context.Topics
+                                 .Where(t => t.ParentTopicId == null && t.IsActive == true)
+                                 .OrderBy(t => t.DisplayOrder)
+                                 .Select(t => new TopicTreeItem(
+                                     t.Id,
+                                     t.Title,
+                                     t.Slug,
+                                     t.InverseParentTopic.Select(c =>
+                                         new TopicTreeItem(
+                                             c.Id,
+                                             c.Title,
+                                             c.Slug,
+                                             new List<TopicTreeItem>(),
+                                             new List<PageLinkItem>()
+                                         )).ToList(),
+                                     t.Pages.Select(p =>
+                                         new PageLinkItem(p.Id, p.Title, p.Slug)).ToList()
+                                 )).ToListAsync(ct);
         }
     }
 }

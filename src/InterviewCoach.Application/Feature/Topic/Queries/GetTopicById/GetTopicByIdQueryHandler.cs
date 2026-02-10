@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using InterviewCoach.Application.Feature.Topic.ReadModels;
+using Microsoft.Extensions.Logging;
 
 namespace InterviewCoach.Application.Feature.Topic.Queries.GetTopicById
 {
-    public class GetTopicByIdQueryHandler : IQueryHandler<GetTopicByIdQuery, TopicDomain.Topic>
+    public class GetTopicByIdQueryHandler : IQueryHandler<GetTopicByIdQuery, TopicDetailsDto>
     {
         private readonly ILogger<GetTopicByIdQueryHandler> logger;
         private readonly ITopicReadRepository topic;
@@ -19,7 +20,7 @@ namespace InterviewCoach.Application.Feature.Topic.Queries.GetTopicById
             this.user = user;
             this.systemClock = systemClock;
         }
-        public async Task<TopicDomain.Topic> Handle(GetTopicByIdQuery request, CancellationToken cancellationToken)
+        public async Task<TopicDetailsDto> Handle(GetTopicByIdQuery request, CancellationToken cancellationToken)
         {
             logger.LogInformation("Handling {QueryName} with TopicId: {TopicId}", nameof(GetTopicByIdQuery), request.TopicId);
             var topicEntity = await topic.GetByIdAsync(request.TopicId, cancellationToken);

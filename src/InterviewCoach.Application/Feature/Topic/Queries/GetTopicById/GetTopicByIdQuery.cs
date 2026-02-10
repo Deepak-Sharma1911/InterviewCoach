@@ -1,5 +1,7 @@
-﻿namespace InterviewCoach.Application.Feature.Topic.Queries.GetTopicById
+﻿using InterviewCoach.Application.Feature.Topic.ReadModels;
+
+namespace InterviewCoach.Application.Feature.Topic.Queries.GetTopicById
 {
-    public record GetTopicByIdQuery(Guid TopicId) : IQuery<TopicDomain.Topic>;
+    public record GetTopicByIdQuery(Guid TopicId) : IQuery<TopicDetailsDto>;
 
 }
