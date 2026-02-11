@@ -1,11 +1,11 @@
 ﻿using InterviewCoach.Infrastructure.Persistence.Database.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace InterviewCoach.Infrastructure.Persistence.Mappings
 {
     public static class TopicMapper
     {
-        //Mapping DomainToEntity and EntityToDomain can be added here in future
-        public static Topic ToEntityTopic(this Domain.Entities.Topic domainTopic)
+        public static Topic ToEntityTopic(this TopicDomain.Topic domainTopic)
         {
             return new Topic
             {
@@ -24,19 +24,24 @@ namespace InterviewCoach.Infrastructure.Persistence.Mappings
 
         public static Domain.Entities.Topic ToDomainTopic(this Topic entityTopic)
         {
-            var domainTopic = Domain.Entities.Topic.Create(entityTopic.Title,
-                slug: entityTopic.Slug,
-                displayOrder: entityTopic.DisplayOrder,
-                parentTopicId: entityTopic.ParentTopicId,
-                createdBy: entityTopic.CreatedBy,
-                utcNow: entityTopic.CreatedUtcDate);
-            // Manually set properties that are not set by the factory method
-            domainTopic.GetType().GetProperty("Id")!.SetValue(domainTopic, entityTopic.Id);
-            domainTopic.GetType().GetProperty("ParentTopicId")!.SetValue(domainTopic, entityTopic.ParentTopicId);
-            domainTopic.GetType().GetProperty("IsActive")!.SetValue(domainTopic, entityTopic.IsActive);
-            domainTopic.GetType().GetProperty("LastModifiedBy")!.SetValue(domainTopic, entityTopic.LastModifiedBy);
-            domainTopic.GetType().GetProperty("LastUtcModified")!.SetValue(domainTopic, entityTopic.LastUtcModified);
-            return domainTopic;
+            var topic = Domain.Entities.Topic.Rehydrate(
+                entityTopic.Id,
+                entityTopic.Title,
+                entityTopic.Slug,
+                entityTopic.DisplayOrder,
+                entityTopic.ParentTopicId,
+                entityTopic.IsActive ?? true,
+                entityTopic.CreatedBy,
+                entityTopic.CreatedUtcDate,
+                entityTopic.LastModifiedBy,
+                entityTopic.LastUtcModified);
+
+            foreach (Page pageEf in entityTopic.Pages)
+            {
+                topic.RehydratePage(PageMapper.ToDomainPage(pageEf));
+            }
+
+            return topic;
         }
     }
 }

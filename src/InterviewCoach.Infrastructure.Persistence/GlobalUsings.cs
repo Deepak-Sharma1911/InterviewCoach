@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace InterviewCoach.Infrastructure.Persistence
-{
-    internal class GlobalUsings
-    {
-    }
-}
+﻿global using Microsoft.EntityFrameworkCore;
+global using InterviewCoach.Application.Abstractions;
+global using TopicDomain = InterviewCoach.Domain.Entities;
+global using PageDomain = InterviewCoach.Domain.Entities;
+global using PageSectionDomain = InterviewCoach.Domain.Entities;

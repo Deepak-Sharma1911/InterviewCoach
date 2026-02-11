@@ -65,6 +65,47 @@ namespace InterviewCoach.Domain.Entities
             if (string.IsNullOrWhiteSpace(slug))
                 throw new DomainException("Topic slug is required.");
         }
+
+        public static Topic Rehydrate(
+                                     Guid id,
+                                     string title,
+                                     string slug,
+                                     int displayOrder,
+                                     Guid? parentTopicId,
+                                     bool isActive,
+                                     Guid createdBy,
+                                     DateTime createdUtc,
+                                     Guid? modifiedBy,
+                                     DateTime modifiedUtc)
+        {
+            return new Topic
+            {
+                Id = id,
+                Title = title,
+                Slug = slug,
+                DisplayOrder = displayOrder,
+                ParentTopicId = parentTopicId,
+                IsActive = isActive,
+                CreatedBy = createdBy,
+                CreatedUtcDate = createdUtc,
+                LastModifiedBy = modifiedBy,
+                LastUtcModified = modifiedUtc
+            };
+        }
+        public void RehydratePage(Page page)
+        {
+            _pages.Add(page);
+        }
+
+        public void Deactivate(Guid modifiedBy, DateTime utcNow)
+        {
+            if (!IsActive)
+                throw new DomainException("Topic is already deactivated.");
+
+            IsActive = false;
+            SetModified(modifiedBy, utcNow);
+        }
+
     }
 }
 

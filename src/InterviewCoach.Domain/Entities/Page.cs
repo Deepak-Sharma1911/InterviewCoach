@@ -6,7 +6,6 @@ namespace InterviewCoach.Domain.Entities
     public sealed class Page : Entity<Guid>
     {
         private readonly List<PageSection> _sections = new();
-
         public Guid TopicId { get; private set; }
         public string Title { get; private set; } = null!;
         public string Slug { get; private set; } = null!;
@@ -68,7 +67,39 @@ namespace InterviewCoach.Domain.Entities
             IsPublished = true;
             SetModified(modifiedBy, utcNow);
         }
-    }
+        public static Page Rehydrate(
+                                        Guid id,
+                                        Guid topicId,
+                                        string title,
+                                        string slug,
+                                        string? summary,
+                                        bool isPublished,
+                                        Guid createdBy,
+                                        DateTime createdUtc,
+                                        Guid? lastModifiedBy,
+                                        DateTime? lastModifiedUtc,
+                                        IEnumerable<PageSection> sections)
+        {
+            var page = new Page
+            {
+                Id = id,
+                TopicId = topicId,
+                Title = title,
+                Slug = slug,
+                Summary = summary,
+                IsPublished = isPublished
+            };
 
+            page.SetCreated(createdBy, createdUtc);
+
+            if (lastModifiedBy.HasValue && lastModifiedUtc.HasValue)
+                page.SetModified(lastModifiedBy.Value, lastModifiedUtc.Value);
+
+            foreach (var section in sections)
+                page._sections.Add(section);
+
+            return page;
+        }
+    }
 }
 

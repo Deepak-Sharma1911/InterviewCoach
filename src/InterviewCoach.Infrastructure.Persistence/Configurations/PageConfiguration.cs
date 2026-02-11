@@ -16,8 +16,8 @@ namespace InterviewCoach.Infrastructure.Persistence.Configurations
             entity.Property(e => e.Slug).HasMaxLength(200);
             entity.Property(e => e.Summary).HasMaxLength(500);
             entity.Property(e => e.Title).HasMaxLength(200);
-            entity.HasOne(d => d.Topic).WithOne(p => p.Page)
-                .HasForeignKey<Page>(d => d.TopicId)
+            entity.HasOne(d => d.Topic).WithMany(p => p.Pages)
+                .HasForeignKey(d => d.TopicId)
                 .HasConstraintName("FK_Pages_Topics");
 
         }

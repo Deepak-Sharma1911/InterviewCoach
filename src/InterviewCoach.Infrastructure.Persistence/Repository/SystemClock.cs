@@ -1,6 +1,4 @@
-﻿using InterviewCoach.Application.Abstractions;
-
-namespace InterviewCoach.Infrastructure.Persistence.Repository
+﻿namespace InterviewCoach.Infrastructure.Persistence.Repository
 {
     public sealed class SystemClock : ISystemClock
     {

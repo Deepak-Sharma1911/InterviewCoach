@@ -20,14 +20,10 @@ public partial class Topic
     public Guid CreatedBy { get; set; }
 
     public DateTime CreatedUtcDate { get; set; }
-
     public Guid? LastModifiedBy { get; set; }
-
     public DateTime LastUtcModified { get; set; }
-
     public virtual ICollection<Topic> InverseParentTopic { get; } = new List<Topic>();
-
-    public virtual Page? Page { get; set; }
-
+    public virtual ICollection<Page?> Pages { get; set; } = new List<Page>();
     public virtual Topic? ParentTopic { get; set; }
 }
+

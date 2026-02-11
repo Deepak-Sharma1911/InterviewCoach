@@ -1,8 +1,12 @@
-﻿namespace InterviewCoach.Application.Abstractions
+﻿using InterviewCoach.Application.Feature.Topic.ReadModels;
+
+
+namespace InterviewCoach.Application.Abstractions
 {
     public interface ITopicReadRepository
     {
-        Task<IReadOnlyList<TopicTreeNodeDto>> GetRootTreeAsync(CancellationToken ct);
-        Task<TopicDto?> GetByIdAsync(Guid id, CancellationToken ct);
+        Task<IReadOnlyList<TopicTreeItem>> GetRootTreeAsync(CancellationToken ct);
+        Task<TopicDetailsDto?> GetByIdAsync(Guid id, CancellationToken ct);
+        Task<TopicDomain.Topic?> GetTopicByIdAsync(Guid id, CancellationToken ct);
     }
 }
