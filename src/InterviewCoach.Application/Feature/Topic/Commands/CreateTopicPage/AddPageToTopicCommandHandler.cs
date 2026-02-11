@@ -7,12 +7,12 @@ namespace InterviewCoach.Application.Feature.Topic.Commands.CreateTopicPage
     public class AddPageToTopicCommandHandler : ICommandHandler<AddPageToTopicCommand, Guid>
     {
         private readonly ILogger<AddPageToTopicCommandHandler> _logger;
-        private readonly ITopicRepository _topics;
+        private readonly ITopicReadRepository _topics;
         private readonly IUnitOfWork _uow;
         private readonly ICurrentUser _user;
         private readonly ISystemClock _clock;
 
-        public AddPageToTopicCommandHandler(ILogger<AddPageToTopicCommandHandler> logger, ITopicRepository topics, IUnitOfWork uow, ICurrentUser user, ISystemClock clock)
+        public AddPageToTopicCommandHandler(ILogger<AddPageToTopicCommandHandler> logger, ITopicReadRepository topics, IUnitOfWork uow, ICurrentUser user, ISystemClock clock)
         {
             _logger = logger;
             _topics = topics;
@@ -24,7 +24,7 @@ namespace InterviewCoach.Application.Feature.Topic.Commands.CreateTopicPage
         public async Task<Guid> Handle(AddPageToTopicCommand command, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Adding page to topic {TopicId} with title {Title}", command.ParentTopicId, command.Title);
-            var parentTopic = await _topics.GetByIdAsync(command.ParentTopicId, cancellationToken);
+            var parentTopic = await _topics.GetTopicByIdAsync(command.ParentTopicId, cancellationToken);
             if (parentTopic is null)
             {
                 _logger.LogWarning("Parent topic with id {TopicId} not found", command.ParentTopicId);

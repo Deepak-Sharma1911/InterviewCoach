@@ -97,6 +97,15 @@ namespace InterviewCoach.Domain.Entities
             _pages.Add(page);
         }
 
+        public void Deactivate(Guid modifiedBy, DateTime utcNow)
+        {
+            if (!IsActive)
+                throw new DomainException("Topic is already deactivated.");
+
+            IsActive = false;
+            SetModified(modifiedBy, utcNow);
+        }
+
     }
 }
 

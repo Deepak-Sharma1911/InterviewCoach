@@ -19,7 +19,6 @@ namespace InterviewCoach.Infrastructure.Persistence.Repository
             var entityTopic = topic.ToEntityTopic();
             await _context.Topics.AddAsync(entityTopic, ct);
         }
-
         public async Task<Topic> GetByIdAsync(Guid id, CancellationToken ct)
         {
             _logger.LogInformation("Getting topic by id: {Id}", id);
@@ -30,6 +29,15 @@ namespace InterviewCoach.Infrastructure.Persistence.Repository
             }
             var topic = await _context.Topics.FirstOrDefaultAsync(t => t.Id == id, ct);
             return topic.ToDomainTopic();
+        }
+
+        public async Task UpdateAsync(Topic topic, CancellationToken token)
+        {
+            var ef = await _context.Topics
+                .FirstOrDefaultAsync(x => x.Id == topic.Id, token);
+            if (ef == null)
+                throw new InvalidOperationException("Topic not found in DB.");
+            ef.IsActive = !topic.IsActive;
         }
     }
 

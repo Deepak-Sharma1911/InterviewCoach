@@ -1,5 +1,7 @@
 ﻿using InterviewCoach.Application.Feature.Topic.ReadModels;
 using InterviewCoach.Infrastructure.Persistence.Database;
+using InterviewCoach.Infrastructure.Persistence.Database.Entities;
+using InterviewCoach.Infrastructure.Persistence.Mappings;
 using Microsoft.Extensions.Logging;
 
 namespace InterviewCoach.Infrastructure.Persistence.Repository
@@ -62,6 +64,16 @@ namespace InterviewCoach.Infrastructure.Persistence.Repository
                                      t.Pages.Select(p =>
                                          new PageLinkItem(p.Id, p.Title, p.Slug)).ToList()
                                  )).ToListAsync(ct);
+        }
+
+        public async Task<TopicDomain.Topic> GetTopicByIdAsync(Guid id, CancellationToken token)
+        {
+            Topic record = await _context.Topics
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id, token);
+            if (record == null)
+                return null;
+            return TopicMapper.ToDomainTopic(record);
         }
     }
 }
