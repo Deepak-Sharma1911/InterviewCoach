@@ -77,6 +77,18 @@ namespace InterviewCoach.Domain.Entities
             if (string.IsNullOrWhiteSpace(content))
                 throw new DomainException("Section content is required.");
         }
+        public void Update(string title, string content, int displayOrder, Guid modifiedBy, DateTime utcNow)
+        {
+            if (string.IsNullOrWhiteSpace(title))
+                throw new DomainException("Section title is required.");
+
+            Title = title;
+            Content = content;
+            DisplayOrder = displayOrder;
+
+            SetModified(modifiedBy, utcNow);
+        }
+
     }
 
 

@@ -11,12 +11,12 @@ namespace InterviewCoach.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetMenu()
-        {
-            _logger.LogInformation("Getting navigation menu");
-            var menu = await Sender.Send(new GetNavigationMenuQuery());
-            return Ok(menu);
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> GetMenu()
+        //{
+        //    _logger.LogInformation("Getting navigation menu");
+        //    var menu = await Sender.Send(new GetNavigationMenuQuery());
+        //    return Ok(menu);
+        //}
     }
 }

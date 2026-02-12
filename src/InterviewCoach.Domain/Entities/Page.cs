@@ -100,6 +100,38 @@ namespace InterviewCoach.Domain.Entities
 
             return page;
         }
+
+        public void UpdateSection(Guid sectionId, string title, string content, int displayOrder, Guid modifiedBy, DateTime utcNow)
+        {
+            if (IsPublished)
+                throw new DomainException("Cannot modify a published page.");
+
+            var section = _sections.FirstOrDefault(x => x.Id == sectionId);
+
+            if (section is null)
+                throw new DomainException("Section not found.");
+
+            section.Update(title, content, displayOrder, modifiedBy, utcNow);
+
+            SetModified(modifiedBy, utcNow);
+        }
+
+        public void RemoveSection(Guid sectionId, Guid modifiedBy, DateTime utcNow)
+        {
+            if (IsPublished)
+                throw new DomainException("Cannot modify a published page.");
+
+            var section = _sections.FirstOrDefault(x => x.Id == sectionId);
+
+            if (section is null)
+                throw new DomainException("Section not found.");
+
+            _sections.Remove(section);
+
+            SetModified(modifiedBy, utcNow);
+        }
+
+
     }
 }
 

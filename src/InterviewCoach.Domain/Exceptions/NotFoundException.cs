@@ -6,6 +6,10 @@
         {
 
         }
+        public NotFoundException(string message) : base(message)
+        {
+
+        }
         public Guid ErrorId { get; }
 
     }
