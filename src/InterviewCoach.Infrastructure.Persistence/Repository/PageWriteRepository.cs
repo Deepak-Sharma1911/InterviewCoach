@@ -27,11 +27,31 @@ namespace InterviewCoach.Infrastructure.Persistence.Repository
             ef.LastModifiedBy = page.LastModifiedBy;
             ef.LastUtcModified = page.LastUtcModified;
 
+            var domainSectionIds = page.Sections.Select(x => x.Id).ToHashSet();
+
+            var removedSections = ef.PageSections
+                .Where(x => !domainSectionIds.Contains(x.Id))
+                .ToList();
+
+            foreach (var removed in removedSections)
+                _context.PageSections.Remove(removed);
+
             foreach (var section in page.Sections)
             {
-                if (!ef.PageSections.Any(x => x.Id == section.Id))
+                var efSection = ef.PageSections
+                    .FirstOrDefault(x => x.Id == section.Id);
+
+                if (efSection == null)
                 {
                     ef.PageSections.Add(PageSectionMapper.ToEntityPageSection(section));
+                }
+                else
+                {
+                    efSection.Title = section.Title;
+                    efSection.Content = section.Content;
+                    efSection.DisplayOrder = section.DisplayOrder;
+                    efSection.LastModifiedBy = section.LastModifiedBy;
+                    efSection.LastUtcModified = section.LastUtcModified;
                 }
             }
         }
