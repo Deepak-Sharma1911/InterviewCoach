@@ -17,6 +17,13 @@ namespace InterviewCoach.API.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Publishes a page by its unique identifier, making it available for users to view. 
+        /// This action typically involves changing the page's status to "published" and may trigger additional processes such as notifications or cache updates.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
         [HttpPost("{id:guid}/publish")]
         public async Task<IActionResult> Publish(Guid id, CancellationToken token)
         {
@@ -25,6 +32,13 @@ namespace InterviewCoach.API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Adds a new section to an existing page, allowing for the expansion of content and structure.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="request"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
         [HttpPost("{id:guid}/sections")]
         public async Task<IActionResult> AddSection(Guid id, AddPageSectionCommand request, CancellationToken token)
         {
@@ -34,6 +48,12 @@ namespace InterviewCoach.API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Gets a page by its slug, which is a URL-friendly identifier typically derived from the page title.
+        /// </summary>
+        /// <param name="slug"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
         [HttpGet("{slug}")]
         public async Task<IActionResult> GetBySlug(string slug, CancellationToken token)
         {
@@ -42,6 +62,14 @@ namespace InterviewCoach.API.Controllers
             return Ok(page);
         }
 
+        /// <summary>
+        /// Updates an existing section of a page, allowing for modifications to the section's title, content, and display order.
+        /// </summary>
+        /// <param name="pageId"></param>
+        /// <param name="sectionId"></param>
+        /// <param name="request"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
         [HttpPut("{pageId:guid}/sections/{sectionId:guid}")]
         public async Task<IActionResult> UpdateSection(Guid pageId, Guid sectionId, UpdatePageSectionCommand request, CancellationToken token)
         {
@@ -51,6 +79,13 @@ namespace InterviewCoach.API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Removes a section from a page, allowing for the deletion of content that is no longer relevant or needed.
+        /// </summary>
+        /// <param name="pageId"></param>
+        /// <param name="sectionId"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
         [HttpDelete("{pageId:guid}/sections/{sectionId:guid}")]
         public async Task<IActionResult> RemoveSection(Guid pageId, Guid sectionId, CancellationToken token)
         {
