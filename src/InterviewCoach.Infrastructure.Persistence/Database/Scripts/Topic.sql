@@ -1,26 +1,54 @@
-CREATE TABLE Topics
+USE [InterviewCoachDB]
+GO
+
+/****** Object:  Table [ic].[Topics]    Script Date: 2/13/2026 4:55:00 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [ic].[Topics](
+	[Id] [uniqueidentifier] NOT NULL,
+	[TechId]  [uniqueidentifier] NOT NULL,
+	[Title] [nvarchar](200) NOT NULL,
+	[Slug] [nvarchar](200) NOT NULL,
+	[ParentTopicId] [uniqueidentifier] NULL,
+	[DisplayOrder] [int] NOT NULL,
+	[IsActive] [bit] NOT NULL,
+	[CreatedBy] [uniqueidentifier] NOT NULL,
+	[CreatedUtcDate] [datetime2](7) NOT NULL,
+	[LastModifiedBy] [uniqueidentifier] NULL,
+	[LastUtcModified] [datetime2](7) NOT NULL,
+ CONSTRAINT [PK_Topics] PRIMARY KEY CLUSTERED 
 (
-    Id UNIQUEIDENTIFIER NOT NULL
-        CONSTRAINT PK_Topics PRIMARY KEY
-        DEFAULT NEWID(),
-    Title NVARCHAR(200) NOT NULL,
-    Slug NVARCHAR(200) NOT NULL,
-    ParentTopicId UNIQUEIDENTIFIER NULL,
-    DisplayOrder INT NOT NULL DEFAULT 0,
-    IsActive BIT NOT NULL DEFAULT 1,
-    CreatedBy UNIQUEIDENTIFIER NOT NULL,
-    CreatedUtcDate DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
-    LastModifiedBy UNIQUEIDENTIFIER NULL,
-    LastUtcModified DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
-);
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
 
-ALTER TABLE Topics
-ADD CONSTRAINT FK_Topics_Parent
-FOREIGN KEY (ParentTopicId)
-REFERENCES Topics(Id);
+ALTER TABLE [ic].[Topics] ADD  DEFAULT (newid()) FOR [Id]
+GO
 
-CREATE UNIQUE INDEX UX_Topics_Slug
-ON Topics(Slug);
+ALTER TABLE [ic].[Topics] ADD  DEFAULT ((0)) FOR [DisplayOrder]
+GO
 
-CREATE INDEX IX_Topics_Parent_Display
-ON Topics(ParentTopicId, DisplayOrder);
+ALTER TABLE [ic].[Topics] ADD  DEFAULT ((1)) FOR [IsActive]
+GO
+
+ALTER TABLE [ic].[Topics] ADD  DEFAULT (sysutcdatetime()) FOR [CreatedUtcDate]
+GO
+
+ALTER TABLE [ic].[Topics] ADD  DEFAULT (sysutcdatetime()) FOR [LastUtcModified]
+GO
+
+ALTER TABLE [ic].[Topics]  WITH CHECK ADD  CONSTRAINT [FK_Topics_Parent] FOREIGN KEY([ParentTopicId])
+REFERENCES [ic].[Topics] ([Id])
+GO
+
+ALTER TABLE [ic].[Topics] CHECK CONSTRAINT [FK_Topics_Parent]
+GO
+ALTER TABLE [ic].[Topics] ADD  CONSTRAINT [FK_Topics_Technology] FOREIGN KEY([TechId])
+REFERENCES [ic].[Technology] ([Id])
+
+

@@ -8,9 +8,9 @@ public partial class PageSection
 
     public int SectionType { get; set; }
 
-    public string Title { get; set; } = null!;
+    public string Title { get; set; }
 
-    public string Content { get; set; } = null!;
+    public string Content { get; set; }
 
     public int DisplayOrder { get; set; }
 
@@ -22,7 +22,7 @@ public partial class PageSection
 
     public DateTime LastUtcModified { get; set; }
 
-    public virtual Page Page { get; set; } = null!;
+    public virtual Page Page { get; set; }
 
-    public virtual PageSectionType SectionTypeNavigation { get; set; } = null!;
+    public virtual PageSectionType SectionTypeNavigation { get; set; }
 }

@@ -1,14 +1,15 @@
 ﻿using InterviewCoach.Infrastructure.Persistence.Database.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace InterviewCoach.Infrastructure.Persistence.Configurations
 {
-    internal class TopicConfiguration : IEntityTypeConfiguration<Topic>
+    public class TechnologyConfiguration : IEntityTypeConfiguration<Technology>
     {
-        public void Configure(EntityTypeBuilder<Topic> entity)
+        public void Configure(EntityTypeBuilder<Technology> entity)
         {
-            entity.ToTable("Topics", "ic");
+            entity.HasKey(e => e.Id).HasName("PK_Technologies");
+
+            entity.ToTable("Technology", "ic");
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
             entity.Property(e => e.CreatedUtcDate).HasDefaultValueSql("(sysutcdatetime())");
@@ -20,15 +21,6 @@ namespace InterviewCoach.Infrastructure.Persistence.Configurations
             entity.Property(e => e.Title)
                 .IsRequired()
                 .HasMaxLength(200);
-
-            entity.HasOne(d => d.ParentTopic).WithMany(p => p.InverseParentTopic)
-                .HasForeignKey(d => d.ParentTopicId)
-                .HasConstraintName("FK_Topics_Parent");
-
-            entity.HasOne(d => d.Tech).WithMany(p => p.Topics)
-                .HasForeignKey(d => d.TechId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Topics_Technology");
         }
     }
 }
