@@ -1,6 +1,6 @@
 ﻿using InterviewCoach.Domain.Entities;
 
-namespace InterviewCoach.Application.Feature.Topic.ReadModels
+namespace InterviewCoach.Application.Wrappers.ReadModels
 {
     public sealed class PageSectionDto
     {

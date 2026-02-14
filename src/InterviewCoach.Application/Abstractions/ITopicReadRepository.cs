@@ -1,4 +1,4 @@
-﻿using InterviewCoach.Application.Feature.Topic.ReadModels;
+﻿using InterviewCoach.Application.Wrappers.ReadModels;
 
 
 namespace InterviewCoach.Application.Abstractions

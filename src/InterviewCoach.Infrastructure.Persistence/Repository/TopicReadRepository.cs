@@ -1,4 +1,4 @@
-﻿using InterviewCoach.Application.Feature.Topic.ReadModels;
+﻿using InterviewCoach.Application.Wrappers.ReadModels;
 using InterviewCoach.Infrastructure.Persistence.Database;
 using InterviewCoach.Infrastructure.Persistence.Database.Entities;
 using InterviewCoach.Infrastructure.Persistence.Mappings;

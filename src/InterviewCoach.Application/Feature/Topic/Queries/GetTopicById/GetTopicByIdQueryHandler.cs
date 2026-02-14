@@ -1,4 +1,4 @@
-﻿using InterviewCoach.Application.Feature.Topic.ReadModels;
+﻿using InterviewCoach.Application.Wrappers.ReadModels;
 using Microsoft.Extensions.Logging;
 
 namespace InterviewCoach.Application.Feature.Topic.Queries.GetTopicById
