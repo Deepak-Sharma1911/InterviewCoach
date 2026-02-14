@@ -1,4 +1,4 @@
-﻿using InterviewCoach.Application.Feature.Topic.ReadModels;
+﻿using InterviewCoach.Application.Wrappers.ReadModels;
 using InterviewCoach.Domain.Entities;
 
 namespace InterviewCoach.Application.Feature.Page.Queries.GetPageBySlug

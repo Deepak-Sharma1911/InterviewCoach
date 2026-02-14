@@ -1,4 +1,4 @@
-﻿namespace InterviewCoach.Application.Feature.Topic.ReadModels
+﻿namespace InterviewCoach.Application.Wrappers.ReadModels
 {
     public sealed record TopicTreeItem(
      Guid Id,

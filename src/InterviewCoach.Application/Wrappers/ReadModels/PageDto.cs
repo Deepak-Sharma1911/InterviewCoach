@@ -1,11 +1,11 @@
-﻿namespace InterviewCoach.Application.Feature.Topic.ReadModels
+﻿namespace InterviewCoach.Application.Wrappers.ReadModels
 {
     public class PageDto
     {
         public Guid Id { get; init; }
         public string Title { get; init; } = null!;
         public string Slug { get; init; } = null!;
-        public string? Summary { get; init; }
+        public string Summary { get; init; }
         public bool IsPublished { get; init; }
         public List<PageSectionDto> Sections { get; init; } = new();
     }

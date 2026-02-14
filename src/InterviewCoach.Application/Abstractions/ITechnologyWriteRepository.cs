@@ -2,7 +2,7 @@
 
 namespace InterviewCoach.Application.Abstractions
 {
-    internal interface ITechnologyWriteRepository
+    public interface ITechnologyWriteRepository
     {
         Task AddAsync(Technology technology, CancellationToken token);
         Task UpdateAsync(Technology technology, CancellationToken token);
