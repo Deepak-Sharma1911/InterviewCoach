@@ -8,8 +8,12 @@ namespace InterviewCoach.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<PageSectionType> entity)
         {
+            entity.ToTable("PageSectionTypes", "ic");
+
             entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.Name).HasMaxLength(50);
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(50);
         }
     }
 }

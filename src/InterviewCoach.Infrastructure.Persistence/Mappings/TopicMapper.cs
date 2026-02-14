@@ -1,5 +1,4 @@
 ﻿using InterviewCoach.Infrastructure.Persistence.Database.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace InterviewCoach.Infrastructure.Persistence.Mappings
 {
@@ -30,7 +29,7 @@ namespace InterviewCoach.Infrastructure.Persistence.Mappings
                 entityTopic.Slug,
                 entityTopic.DisplayOrder,
                 entityTopic.ParentTopicId,
-                entityTopic.IsActive ?? true,
+                entityTopic.IsActive,
                 entityTopic.CreatedBy,
                 entityTopic.CreatedUtcDate,
                 entityTopic.LastModifiedBy,

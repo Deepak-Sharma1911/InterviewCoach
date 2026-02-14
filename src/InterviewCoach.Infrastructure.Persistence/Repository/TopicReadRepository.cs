@@ -30,7 +30,7 @@ namespace InterviewCoach.Infrastructure.Persistence.Repository
                                      Id = t.Id,
                                      Title = t.Title,
                                      Slug = t.Slug,
-                                     IsActive = t.IsActive ?? true,
+                                     IsActive = t.IsActive,
                                      Pages = t.Pages
                                          .Select(p => new PageDto
                                          {

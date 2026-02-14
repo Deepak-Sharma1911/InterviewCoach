@@ -1,5 +1,4 @@
 ﻿using InterviewCoach.Infrastructure.Persistence.Database.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace InterviewCoach.Infrastructure.Persistence.Configurations
@@ -8,12 +7,15 @@ namespace InterviewCoach.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<PageSection> entity)
         {
-            entity.HasIndex(e => new { e.PageId, e.DisplayOrder }, "IX_PageSections_Page_Display");
+            entity.ToTable("PageSections", "ic");
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.Content).IsRequired();
             entity.Property(e => e.CreatedUtcDate).HasDefaultValueSql("(sysutcdatetime())");
             entity.Property(e => e.LastUtcModified).HasDefaultValueSql("(sysutcdatetime())");
-            entity.Property(e => e.Title).HasMaxLength(200);
+            entity.Property(e => e.Title)
+                .IsRequired()
+                .HasMaxLength(200);
 
             entity.HasOne(d => d.Page).WithMany(p => p.PageSections)
                 .HasForeignKey(d => d.PageId)
