@@ -1,6 +1,6 @@
 ﻿using InterviewCoach.Infrastructure.Persistence.Database;
 using InterviewCoach.Infrastructure.Persistence.Interceptors;
-using Microsoft.EntityFrameworkCore;
+using InterviewCoach.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +27,15 @@ namespace InterviewCoach.Infrastructure.Persistence
                 }).EnableDetailedErrors()
                   .EnableSensitiveDataLogging();
             });
+            services.AddSingleton<ISystemClock, SystemClock>();
+            services.AddScoped<IPageReadRepository, PageReadRepository>();
+            services.AddScoped<IPageWriteRepository, PageWriteRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<ITechnologyReadRepository, TechnologyReadRepository>();
+            services.AddScoped<ITechnologyWriteRepository, TechnologyWriteRepository>();
+            services.AddScoped<ITopicRepository, TopicRepository>();
+            services.AddScoped<ITopicReadRepository, TopicReadRepository>();
+
             return services;
         }
     }

@@ -3,16 +3,23 @@ using Serilog.Context;
 
 namespace InterviewCoach.API.Middleware
 {
-    public class RequestContextLoggingMiddleware 
+    public class RequestContextLoggingMiddleware
     {
-        private readonly RequestDelegate next;
-
-        private const string CorrelationIdHeaderName = "Correlation-Id";
-        public Task Invoke(HttpContext context)
+        private readonly RequestDelegate _next;
+        private readonly ILogger<RequestContextLoggingMiddleware> _logger;
+        public RequestContextLoggingMiddleware(ILogger<RequestContextLoggingMiddleware> logger, RequestDelegate next)
         {
+            _logger = logger;
+            _next = next;
+        }
+        private const string CorrelationIdHeaderName = "Correlation-Id";
+        public async Task InvokeAsync(HttpContext context)
+        {
+            _logger.LogInformation("Request Path: {Path}", context.Request.Path);
+
             using (LogContext.PushProperty("CorrelationId", GetCorrelationId(context)))
             {
-                return next.Invoke(context);
+                await _next(context);
             }
         }
         private static string GetCorrelationId(HttpContext context)
