@@ -21,7 +21,7 @@ namespace InterviewCoach.API
             builder.Services.AddPresentation();
             builder.Services.AddApplicationServices();
             builder.Services.AddPersistenceService(builder.Configuration);
-
+      
             WebApplication app = builder.Build();
 
 
@@ -40,12 +40,14 @@ namespace InterviewCoach.API
 
             app.UseExceptionHandler();
 
-            app.UseAuthentication();
+            app.UseRouting();
 
-            app.UseAuthorization();
+            //app.UseAuthentication();
+
+            //app.UseAuthorization();
 
             app.MapControllers();
-
+           
             await app.RunAsync();
         }
     }
