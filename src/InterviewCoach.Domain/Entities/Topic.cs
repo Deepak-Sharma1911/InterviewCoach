@@ -11,6 +11,7 @@ namespace InterviewCoach.Domain.Entities
         public string Slug { get; private set; } = null!;
         public int DisplayOrder { get; private set; }
         public bool IsActive { get; private set; }
+        public Guid TechId { get; private set; }
         public IReadOnlyCollection<Page> Pages => _pages.AsReadOnly();
         private Topic() { }
         public static Topic Create(
@@ -18,6 +19,7 @@ namespace InterviewCoach.Domain.Entities
             string slug,
             int displayOrder,
             Guid? parentTopicId,
+            Guid techId,
             Guid createdBy,
             DateTime utcNow)
         {
@@ -30,7 +32,8 @@ namespace InterviewCoach.Domain.Entities
                 Slug = slug,
                 DisplayOrder = displayOrder,
                 ParentTopicId = parentTopicId,
-                IsActive = true
+                IsActive = true,
+                TechId = techId
             };
 
             topic.SetCreated(createdBy, utcNow);
@@ -73,6 +76,7 @@ namespace InterviewCoach.Domain.Entities
                                      int displayOrder,
                                      Guid? parentTopicId,
                                      bool isActive,
+                                     Guid techId,
                                      Guid createdBy,
                                      DateTime createdUtc,
                                      Guid? modifiedBy,
@@ -86,6 +90,7 @@ namespace InterviewCoach.Domain.Entities
                 DisplayOrder = displayOrder,
                 ParentTopicId = parentTopicId,
                 IsActive = isActive,
+                TechId = techId,
                 CreatedBy = createdBy,
                 CreatedUtcDate = createdUtc,
                 LastModifiedBy = modifiedBy,

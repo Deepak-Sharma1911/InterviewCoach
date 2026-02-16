@@ -13,7 +13,12 @@ public partial class ApplicationContext : DbContext
     public DbSet<Page> Pages => Set<Page>();
     public DbSet<PageSection> PageSections => Set<PageSection>();
     public DbSet<PageSectionType> PageSectionTypes => Set<PageSectionType>();
-    public DbSet<Technology> Technologies => Set<Technology>();
-    protected override void OnModelCreating(ModelBuilder modelBuilder) => base.OnModelCreating(modelBuilder);
+    public DbSet<Technology> Technology => Set<Technology>();
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationContext).Assembly);
+
+    }
 
 }

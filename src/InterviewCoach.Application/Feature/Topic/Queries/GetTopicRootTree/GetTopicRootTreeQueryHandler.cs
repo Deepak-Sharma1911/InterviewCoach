@@ -1,15 +1,23 @@
-﻿namespace InterviewCoach.Application.Feature.Topic.Queries.GetTopicRootTree
+﻿using InterviewCoach.Application.Feature.Topic.Queries.GetTopicById;
+using InterviewCoach.Application.Wrappers.ReadModels;
+using InterviewCoach.Domain.Entities;
+using Microsoft.Extensions.Logging;
+
+namespace InterviewCoach.Application.Feature.Topic.Queries.GetTopicRootTree
 {
-    public class GetTopicRootTreeQueryHandler : IQueryHandler<GetTopicRootTreeQuery, IReadOnlyList<TopicDomain.Topic>>
+    public class GetTopicRootTreeQueryHandler : IQueryHandler<GetTopicRootTreeQuery, IReadOnlyList<TopicTreeItem>>
     {
-        private readonly ITopicReadRepository _repo;
-        public GetTopicRootTreeQueryHandler(ITopicReadRepository repo)
+        private readonly ILogger<GetTopicRootTreeQueryHandler> _logger;
+        private readonly ITopicReadRepository _topicRead;
+        public GetTopicRootTreeQueryHandler(ILogger<GetTopicRootTreeQueryHandler> logger, ITopicReadRepository topicRead)
         {
-            _repo = repo;
+            _logger = logger;
+            _topicRead = topicRead;
         }
-        public Task<IReadOnlyList<TopicDomain.Topic>> Handle(GetTopicRootTreeQuery request, CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<TopicTreeItem>> Handle(GetTopicRootTreeQuery request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation("Get All the Topics");
+            return await _topicRead.GetRootTreeAsync(request.TechId, cancellationToken);
         }
     }
 }
