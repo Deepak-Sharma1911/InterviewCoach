@@ -16,7 +16,7 @@ namespace InterviewCoach.Infrastructure.Persistence
             services.AddDbContext<ApplicationContext>((builder, options) =>
             {
                 options.AddInterceptors(builder.GetService<ISaveChangesInterceptor>()!);
-                options.UseSqlServer(configuration.GetConnectionString(""), builder =>
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), builder =>
                 {
                     builder.EnableRetryOnFailure(
                            maxRetryCount: 5,

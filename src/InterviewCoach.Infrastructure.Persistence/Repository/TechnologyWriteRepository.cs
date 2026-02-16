@@ -19,13 +19,13 @@ namespace InterviewCoach.Infrastructure.Persistence.Repository
         {
             _logger.LogInformation("Adding Technology to database");
             var efEntity = TechnologyMapper.ToEntityTechnology(technology);
-            await _context.Technologies.AddAsync(efEntity, token);
+            await _context.Technology.AddAsync(efEntity, token);
         }
 
         public async Task UpdateAsync(Technology technology, CancellationToken token)
         {
             _logger.LogInformation("Updating Technology");
-            var existing = await _context.Technologies
+            var existing = await _context.Technology
                .FirstAsync(x => x.Id == technology.Id, token);
 
             existing.Title = technology.Title;

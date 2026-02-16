@@ -22,27 +22,33 @@ namespace InterviewCoach.Infrastructure.Persistence.Repository
         }
         public async Task<IReadOnlyList<Technology>> GetAllAsync(CancellationToken token)
         {
-            var list = await _context.Technologies
-                .AsNoTracking()
-                .ToListAsync(token);
+            var list = await _context.Technology
+                                     .Where(x => x.IsActive)
+                                     .OrderBy(x => x.Id)
+                                     .AsNoTracking()
+                                     .ToListAsync(token);
 
             return list.Select(TechnologyMapper.ToDomainTechnology).ToList();
         }
 
         public async Task<Technology> GetByIdAsync(Guid id, CancellationToken token)
         {
-            var efEntity = await _context.Technologies
-           .AsNoTracking()
-           .FirstOrDefaultAsync(x => x.Id == id, token);
+            var efEntity = await _context.Technology
+                                         .AsNoTracking()
+                                         .OrderBy(x => x.Id)
+                                         .Where(x => x.IsActive)
+                                         .FirstOrDefaultAsync(x => x.Id == id, token);
 
             return efEntity == null ? null : TechnologyMapper.ToDomainTechnology(efEntity);
         }
 
         public async  Task<Technology> GetBySlugAsync(string slug, CancellationToken token)
         {
-            var efEntity = await _context.Technologies
-              .AsNoTracking()
-              .FirstOrDefaultAsync(x => x.Slug == slug, token);
+            var efEntity = await _context.Technology
+                                         .Where(x => x.IsActive)
+                                         .OrderBy(x => x.Id)
+                                         .AsNoTracking()
+                                         .FirstOrDefaultAsync(x => x.Slug == slug, token);
 
             return efEntity == null ? null : TechnologyMapper.ToDomainTechnology(efEntity);
         }

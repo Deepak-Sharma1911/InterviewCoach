@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace InterviewCoach.Infrastructure.Persistence.Configurations
 {
-    internal class TopicConfiguration : IEntityTypeConfiguration<Topic>
+    public class TopicConfiguration : IEntityTypeConfiguration<Topic>
     {
         public void Configure(EntityTypeBuilder<Topic> entity)
         {

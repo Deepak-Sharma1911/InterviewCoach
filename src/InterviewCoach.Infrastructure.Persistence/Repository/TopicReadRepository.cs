@@ -15,7 +15,7 @@ namespace InterviewCoach.Infrastructure.Persistence.Repository
             _logger = logger;
             _context = context;
         }
-        public async Task<TopicDetailsDto> GetByIdAsync(Guid id, CancellationToken ct)
+        public async Task<TopicDetailsDto> GetByIdAsync(Guid technologyId, Guid id, CancellationToken ct)
         {
             _logger.LogInformation("Getting topic by id: {Id}", id);
             if (id == Guid.Empty)
@@ -24,7 +24,7 @@ namespace InterviewCoach.Infrastructure.Persistence.Repository
                 throw new ArgumentException("Id cannot be empty", nameof(id));
             }
             return await _context.Topics
-                                 .Where(t => t.Id == id)
+                                 .Where(t => t.Id == id && t.TechId == technologyId)
                                  .Select(t => new TopicDetailsDto
                                  {
                                      Id = t.Id,
@@ -43,11 +43,11 @@ namespace InterviewCoach.Infrastructure.Persistence.Repository
                                  }).FirstOrDefaultAsync(ct);
         }
 
-        public async Task<IReadOnlyList<TopicTreeItem>> GetRootTreeAsync(CancellationToken ct)
+        public async Task<IReadOnlyList<TopicTreeItem>> GetRootTreeAsync(Guid technologyId, CancellationToken ct)
         {
             _logger.LogInformation("Getting topic root tree");
             return await _context.Topics
-                                 .Where(t => t.ParentTopicId == null && t.IsActive == true)
+                                 .Where(t => t.ParentTopicId == null && t.IsActive == true && t.TechId == technologyId)
                                  .OrderBy(t => t.DisplayOrder)
                                  .Select(t => new TopicTreeItem(
                                      t.Id,
@@ -64,6 +64,14 @@ namespace InterviewCoach.Infrastructure.Persistence.Repository
                                      t.Pages.Select(p =>
                                          new PageLinkItem(p.Id, p.Title, p.Slug)).ToList()
                                  )).ToListAsync(ct);
+        }
+
+        public async Task<TopicDomain.Topic> GetTopicByIdAsync(Guid technologyId, Guid id, CancellationToken token)
+        {
+            Topic record = await _context.Topics.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && x.TechId == technologyId, token);
+            if (record == null)
+                return null;
+            return TopicMapper.ToDomainTopic(record);
         }
 
         public async Task<TopicDomain.Topic> GetTopicByIdAsync(Guid id, CancellationToken token)
