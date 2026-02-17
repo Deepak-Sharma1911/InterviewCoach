@@ -1,11 +1,11 @@
 ﻿using InterviewCoach.Application.Feature.Page.Commands.CreatePageSection;
 using InterviewCoach.Application.Feature.Page.Commands.PublishPage;
+using InterviewCoach.Application.Feature.Page.Commands.RemovePage;
 using InterviewCoach.Application.Feature.Page.Commands.RemovePageSection;
 using InterviewCoach.Application.Feature.Page.Commands.UpdatePageSection;
+using InterviewCoach.Application.Feature.Page.Queries.GetPageById;
 using InterviewCoach.Application.Feature.Page.Queries.GetPageBySlug;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using static System.Collections.Specialized.BitVector32;
 
 namespace InterviewCoach.API.Controllers
 {
@@ -60,6 +60,29 @@ namespace InterviewCoach.API.Controllers
             _logger.LogInformation("Getting page by slug: {Slug}", slug);
             var page = await Sender.Send(new GetPageBySlugQuery(slug), token);
             return Ok(page);
+        }
+
+        /// <summary>
+        /// Gets a page by its slug, which is a URL-friendly identifier typically derived from the page title.
+        /// </summary>
+        /// <param name="slug"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        [HttpGet("{PageId:guid}")]
+        public async Task<IActionResult> GetById(Guid PageId, CancellationToken token)
+        {
+            _logger.LogInformation("Getting page by Guid: {Guid}", PageId);
+            var page = await Sender.Send(new GetByPageIdQuery(PageId), token);
+            return Ok(page);
+        }
+
+
+        [HttpDelete("{pageId:guid}")]
+        public async Task<IActionResult> RemovePage(Guid pageId, CancellationToken token)
+        {
+            _logger.LogInformation("Removing  page ID: {PageId}", pageId);
+            await Sender.Send(new RemovePageCommand(pageId), token);
+            return NoContent();
         }
 
         /// <summary>

@@ -25,7 +25,7 @@ namespace InterviewCoach.Application.Feature.Topic.Commands.DeactivateTopic
 
         public async Task<Unit> Handle(DeactivateTopicCommand request, CancellationToken cancellationToken)
         {
-            TopicDomain.Topic topic = await _readRepository.GetTopicByIdAsync(request.TechnologyId, request.TopicId, cancellationToken);
+            TopicDomain.Topic topic = await _readRepository.GetTopicByIdAsync(request.TopicId, cancellationToken);
             topic.Deactivate(_currentUser.UserId, _dateTime.UtcNow);
             await _writeRepository.UpdateAsync(topic, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);

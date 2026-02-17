@@ -1,4 +1,5 @@
 ﻿using InterviewCoach.Application.Feature.Topic.Commands.CreateChildTopic;
+using InterviewCoach.Domain.Entities;
 using InterviewCoach.Domain.Exceptions;
 using Microsoft.Extensions.Logging;
 
@@ -8,14 +9,16 @@ namespace InterviewCoach.Application.Feature.Topic.Commands.CreateTopicPage
     {
         private readonly ILogger<AddPageToTopicCommandHandler> _logger;
         private readonly ITopicReadRepository _topics;
+        private readonly IPageWriteRepository _writeRepository;
         private readonly IUnitOfWork _uow;
         private readonly ICurrentUser _user;
         private readonly ISystemClock _clock;
 
-        public AddPageToTopicCommandHandler(ILogger<AddPageToTopicCommandHandler> logger, ITopicReadRepository topics, IUnitOfWork uow, ICurrentUser user, ISystemClock clock)
+        public AddPageToTopicCommandHandler(ILogger<AddPageToTopicCommandHandler> logger, ITopicReadRepository topics, IPageWriteRepository writeRepository, IUnitOfWork uow, ICurrentUser user, ISystemClock clock)
         {
             _logger = logger;
             _topics = topics;
+            _writeRepository = writeRepository;
             _uow = uow;
             _user = user;
             _clock = clock;
@@ -31,6 +34,7 @@ namespace InterviewCoach.Application.Feature.Topic.Commands.CreateTopicPage
                 throw new NotFoundException(command.ParentTopicId);
             }
             var page = parentTopic.AddPage(command.Title, command.Slug, command.Summary, _user.UserId, _clock.UtcNow);
+            await _writeRepository.AddAsync(page, cancellationToken);
             await _uow.SaveChangesAsync(cancellationToken);
             return page.Id;
         }

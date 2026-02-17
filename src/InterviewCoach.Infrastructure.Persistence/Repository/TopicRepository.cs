@@ -37,7 +37,7 @@ namespace InterviewCoach.Infrastructure.Persistence.Repository
                 .FirstOrDefaultAsync(x => x.Id == topic.Id, token);
             if (ef == null)
                 throw new InvalidOperationException("Topic not found in DB.");
-            ef.IsActive = !topic.IsActive;
+            ef.IsActive = topic.IsActive;
         }
     }
 

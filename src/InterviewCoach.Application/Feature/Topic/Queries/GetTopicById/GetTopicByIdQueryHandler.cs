@@ -23,7 +23,7 @@ namespace InterviewCoach.Application.Feature.Topic.Queries.GetTopicById
         public async Task<TopicDetailsDto> Handle(GetTopicByIdQuery request, CancellationToken cancellationToken)
         {
             logger.LogInformation("Handling {QueryName} with TopicId: {TopicId}", nameof(GetTopicByIdQuery), request.TopicId);
-            var topicEntity = await topic.GetByIdAsync(request.TechId, request.TopicId, cancellationToken);
+            var topicEntity = await topic.GetByIdAsync(request.TopicId, cancellationToken);
             if (topicEntity is null)
             {
                 logger.LogWarning("Topic with ID {TopicId} not found.", request.TopicId);
