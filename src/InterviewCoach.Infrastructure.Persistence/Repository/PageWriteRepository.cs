@@ -14,6 +14,25 @@ namespace InterviewCoach.Infrastructure.Persistence.Repository
             _logger = logger;
             _context = context;
         }
+
+        public async Task<Guid> AddAsync(Page page, CancellationToken token)
+        {
+            if (!await _context.Topics.AnyAsync(t => t.Id == page.TopicId, token))
+                throw new InvalidOperationException("Topic not found.");
+            var pageEntity = PageMapper.ToEntityPage(page);
+            await _context.Pages.AddAsync(pageEntity, token);
+            await _context.SaveChangesAsync(token);
+            return pageEntity.Id;
+        }
+
+        public async Task RemoveAsync(Page page, CancellationToken token)
+        {
+            var ef = await _context.Pages.Where(x => x.Id == page.Id).FirstOrDefaultAsync(token);
+            if (ef == null)
+                throw new InvalidOperationException("Page not found.");
+            _context.Pages.Remove(ef);
+        }
+
         public async Task UpdateAsync(Page page, CancellationToken token)
         {
             var ef = await _context.Pages

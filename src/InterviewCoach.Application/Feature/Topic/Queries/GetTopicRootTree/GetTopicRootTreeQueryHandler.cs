@@ -17,7 +17,7 @@ namespace InterviewCoach.Application.Feature.Topic.Queries.GetTopicRootTree
         public async Task<IReadOnlyList<TopicTreeItem>> Handle(GetTopicRootTreeQuery request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Get All the Topics");
-            return await _topicRead.GetRootTreeAsync(request.TechId, cancellationToken);
+            return await _topicRead.GetRootTreeAsync(cancellationToken);
         }
     }
 }

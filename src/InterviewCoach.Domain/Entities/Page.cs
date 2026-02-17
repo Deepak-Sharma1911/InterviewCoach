@@ -131,7 +131,12 @@ namespace InterviewCoach.Domain.Entities
             SetModified(modifiedBy, utcNow);
         }
 
-
+        public void RemovePage(Guid modifiedBy, DateTime utcNow)
+        {
+            if (IsPublished)
+                throw new DomainException("Cannot remove a published page.");
+            SetModified(modifiedBy, utcNow);
+        }
     }
 }
 

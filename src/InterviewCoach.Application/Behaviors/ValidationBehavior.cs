@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using InterviewCoach.Application.Abstractions;
 using MediatR;
 
 namespace InterviewCoach.Application.Behaviors

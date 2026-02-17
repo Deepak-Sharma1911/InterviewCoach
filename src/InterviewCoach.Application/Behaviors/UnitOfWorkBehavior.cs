@@ -1,5 +1,4 @@
-﻿using InterviewCoach.Application.Abstractions;
-using MediatR;
+﻿using MediatR;
 
 namespace InterviewCoach.Application.Behavious
 {

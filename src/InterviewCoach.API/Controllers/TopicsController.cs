@@ -22,11 +22,11 @@ namespace InterviewCoach.API.Controllers
         /// <param name="id"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        [HttpGet("{technologyId:guid}/topic/{id:guid}")]
-        public async Task<IActionResult> GetById(Guid technologyId, Guid id, CancellationToken token)
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetById(Guid id, CancellationToken token)
         {
             _logger.LogInformation("Getting topic by ID: {TopicId}", id);
-            var topic = await Sender.Send(new GetTopicByIdQuery(technologyId, id), token);
+            var topic = await Sender.Send(new GetTopicByIdQuery(id), token);
             return Ok(topic);
         }
 
@@ -34,7 +34,7 @@ namespace InterviewCoach.API.Controllers
         /// Gets all topics in a tree structure.
         /// </summary>
         /// <returns></returns>
-        [HttpGet("{technologyId:guid}")]
+        [HttpGet]
         public async Task<IActionResult> GetAll(Guid technologyId, CancellationToken token)
         {
             _logger.LogInformation("Getting all topics in tree structure");
@@ -48,11 +48,11 @@ namespace InterviewCoach.API.Controllers
         /// <param name="request">The command containing the details of the topic to create. Cannot be null.</param>
         /// <returns>A response with status code 201 (Created) containing the created topic and a location header referencing the
         /// new resource.</returns>
-        [HttpPost("{TechnologyId:Guid}/Create")]
-        public async Task<IActionResult> Create(Guid TechnologyId, CreateRootTopicCommand request, CancellationToken token)
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateRootTopicCommand request, CancellationToken token)
         {
             _logger.LogInformation("Creating new topic with title: {Title}", request.Title);
-            var result = await Sender.Send(new CreateRootTopicCommand(request.Title, request.Slug, request.DisplayOrder, request.ParentTopicId, TechnologyId), token);
+            var result = await Sender.Send(request, token);
             return CreatedAtAction(nameof(GetById), new { id = result }, result);
         }
 
@@ -65,10 +65,9 @@ namespace InterviewCoach.API.Controllers
         [HttpPost("{id:guid}/pages")]
         public async Task<IActionResult> AddPage(Guid id, AddPageRequest request, CancellationToken token)
         {
-
             _logger.LogInformation("Adding page to topic ID: {TopicId} with title: {Title}", id, request.Title);
             var pageId = await Sender.Send(new AddPageToTopicCommand(id, request.Title, request.Slug, request.Summary), token);
-            return CreatedAtRoute(routeName: nameof(GetById), routeValues: new { id = pageId }, value: new { PageId = pageId });
+            return CreatedAtAction(actionName: nameof(PagesController.GetById), controllerName: "Pages", routeValues: new { PageId = pageId }, value: request);
         }
 
         /// <summary>
@@ -76,11 +75,11 @@ namespace InterviewCoach.API.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPost("technology/{TechnologyId:guid}/deactivate/{id:guid}/")]
-        public async Task<IActionResult> Deactivate(Guid TechnologyId, Guid id, CancellationToken token)
+        [HttpPost("deactivate/{id:guid}/")]
+        public async Task<IActionResult> Deactivate(Guid id, CancellationToken token)
         {
             _logger.LogInformation("Deactivating topic ID: {TopicId}", id);
-            await Sender.Send(new DeactivateTopicCommand(TechnologyId,id), token);
+            await Sender.Send(new DeactivateTopicCommand(id), token);
             return NoContent();
         }
     }

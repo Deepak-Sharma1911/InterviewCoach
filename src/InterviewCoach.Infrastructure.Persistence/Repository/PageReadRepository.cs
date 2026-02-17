@@ -17,9 +17,9 @@ namespace InterviewCoach.Infrastructure.Persistence.Repository
         public async Task<Page> GetByIdAsync(Guid id, CancellationToken token)
         {
             var ef = await _context.Pages
-                .Include(p => p.PageSections)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == id, token);
+                                   .Include(p => p.PageSections)
+                                   .AsNoTracking()
+                                   .FirstOrDefaultAsync(x => x.Id == id, token);
             return ef is null ? null : PageMapper.ToDomainPage(ef);
         }
 
