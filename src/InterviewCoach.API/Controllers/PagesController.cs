@@ -76,7 +76,12 @@ namespace InterviewCoach.API.Controllers
             return Ok(page);
         }
 
-
+        /// <summary>
+        /// Delete the Page by PageId
+        /// </summary>
+        /// <param name="pageId"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
         [HttpDelete("{pageId:guid}")]
         public async Task<IActionResult> RemovePage(Guid pageId, CancellationToken token)
         {

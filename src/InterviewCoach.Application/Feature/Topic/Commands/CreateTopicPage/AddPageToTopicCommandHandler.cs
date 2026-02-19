@@ -1,5 +1,4 @@
 ﻿using InterviewCoach.Application.Feature.Topic.Commands.CreateChildTopic;
-using InterviewCoach.Domain.Entities;
 using InterviewCoach.Domain.Exceptions;
 using Microsoft.Extensions.Logging;
 
