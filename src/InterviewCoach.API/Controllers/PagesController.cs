@@ -40,10 +40,10 @@ namespace InterviewCoach.API.Controllers
         /// <param name="token"></param>
         /// <returns></returns>
         [HttpPost("{id:guid}/sections")]
-        public async Task<IActionResult> AddSection(Guid id, AddPageSectionCommand request, CancellationToken token)
+        public async Task<IActionResult> AddSection(Guid id, AddPageSectionRequest request, CancellationToken token)
         {
             _logger.LogInformation("Adding section to page ID: {PageId} with title: {Title}", id, request.Title);
-            await Sender.Send(request, token);
+            await Sender.Send(new AddPageSectionCommand(PageId: id, Type: request.Type, Title: request.Title, Content: request.Content, DisplayOrder: request.DisplayOrder), token);
 
             return NoContent();
         }
@@ -76,7 +76,12 @@ namespace InterviewCoach.API.Controllers
             return Ok(page);
         }
 
-
+        /// <summary>
+        /// Delete the Page by PageId
+        /// </summary>
+        /// <param name="pageId"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
         [HttpDelete("{pageId:guid}")]
         public async Task<IActionResult> RemovePage(Guid pageId, CancellationToken token)
         {

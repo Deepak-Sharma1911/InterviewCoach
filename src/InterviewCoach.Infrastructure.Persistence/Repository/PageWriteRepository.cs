@@ -20,7 +20,7 @@ namespace InterviewCoach.Infrastructure.Persistence.Repository
             if (!await _context.Topics.AnyAsync(t => t.Id == page.TopicId, token))
                 throw new InvalidOperationException("Topic not found.");
             var pageEntity = PageMapper.ToEntityPage(page);
-            await _context.Pages.AddAsync(pageEntity, token);
+            await _context.Pages.AddAsync(pageEntity, token);            
             await _context.SaveChangesAsync(token);
             return pageEntity.Id;
         }
