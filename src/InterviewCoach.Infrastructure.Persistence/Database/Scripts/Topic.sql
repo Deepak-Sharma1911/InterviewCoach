@@ -16,6 +16,7 @@ CREATE TABLE [ic].[Topics](
 	[ParentTopicId] [uniqueidentifier] NULL,
 	[DisplayOrder] [int] NOT NULL,
 	[IsActive] [bit] NOT NULL,
+	[RowVersion] rowversion NOT NULL,
 	[CreatedBy] [uniqueidentifier] NOT NULL,
 	[CreatedUtcDate] [datetime2](7) NOT NULL,
 	[LastModifiedBy] [uniqueidentifier] NULL,

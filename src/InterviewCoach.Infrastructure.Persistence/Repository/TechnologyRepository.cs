@@ -1,20 +1,14 @@
 ﻿using InterviewCoach.Domain.Entities;
 using InterviewCoach.Infrastructure.Persistence.Database;
-using InterviewCoach.Infrastructure.Persistence.Mappings;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace InterviewCoach.Infrastructure.Persistence.Repository
 {
-    internal class TechnologyReadRepository : ITechnologyReadRepository
+    public class TechnologyRepository : ITechnologyRepository
     {
-        private readonly ILogger<TechnologyReadRepository> _logger;
+        private readonly ILogger<TechnologyRepository> _logger;
         private readonly ApplicationContext _context;
-        public TechnologyReadRepository(ILogger<TechnologyReadRepository> logger, ApplicationContext context)
+        public TechnologyRepository(ILogger<TechnologyRepository> logger, ApplicationContext context)
         {
             _logger = logger;
             _context = context;
@@ -22,15 +16,13 @@ namespace InterviewCoach.Infrastructure.Persistence.Repository
         }
         public async Task<IReadOnlyList<Technology>> GetAllAsync(CancellationToken token)
         {
-            var list = await _context.Technology
+           return await _context.Technology
                                      .Where(x => x.IsActive)
                                      .OrderBy(x => x.Id)
                                      .AsNoTracking()
                                      .ToListAsync(token);
 
-            return list.Select(TechnologyMapper.ToDomainTechnology).ToList();
         }
-
         public async Task<Technology> GetByIdAsync(Guid id, CancellationToken token)
         {
             var efEntity = await _context.Technology
@@ -39,10 +31,9 @@ namespace InterviewCoach.Infrastructure.Persistence.Repository
                                          .Where(x => x.IsActive)
                                          .FirstOrDefaultAsync(x => x.Id == id, token);
 
-            return efEntity == null ? null : TechnologyMapper.ToDomainTechnology(efEntity);
+            return efEntity == null ? null : efEntity;
         }
-
-        public async  Task<Technology> GetBySlugAsync(string slug, CancellationToken token)
+        public async Task<Technology> GetBySlugAsync(string slug, CancellationToken token)
         {
             var efEntity = await _context.Technology
                                          .Where(x => x.IsActive)
@@ -50,7 +41,12 @@ namespace InterviewCoach.Infrastructure.Persistence.Repository
                                          .AsNoTracking()
                                          .FirstOrDefaultAsync(x => x.Slug == slug, token);
 
-            return efEntity == null ? null : TechnologyMapper.ToDomainTechnology(efEntity);
+            return efEntity == null ? null : efEntity;
+        }
+        public async Task AddAsync(Technology technology, CancellationToken token)
+        {
+            _logger.LogInformation("Adding Technology to database");
+            await _context.Technology.AddAsync(technology, token);
         }
     }
 }

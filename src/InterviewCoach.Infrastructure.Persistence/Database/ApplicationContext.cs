@@ -1,4 +1,4 @@
-﻿using InterviewCoach.Infrastructure.Persistence.Database.Entities;
+﻿using InterviewCoach.Domain.Entities;
 
 namespace InterviewCoach.Infrastructure.Persistence.Database;
 

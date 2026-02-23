@@ -1,5 +1,4 @@
-﻿using InterviewCoach.Infrastructure.Persistence.Database.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using InterviewCoach.Domain.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace InterviewCoach.Infrastructure.Persistence.Configurations
@@ -10,25 +9,49 @@ namespace InterviewCoach.Infrastructure.Persistence.Configurations
         {
             entity.ToTable("Topics", "ic");
 
-            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
-            entity.Property(e => e.CreatedUtcDate).HasDefaultValueSql("(sysutcdatetime())");
+            entity.Property(e => e.Id).ValueGeneratedNever();
+
+            entity.Property(e => e.CreatedUtcDate).IsRequired();
+
             entity.Property(e => e.IsActive).HasDefaultValue(true);
-            entity.Property(e => e.LastUtcModified).HasDefaultValueSql("(sysutcdatetime())");
+
+            entity.Property(e => e.LastUtcModified).IsRequired();
+
+            entity.Property(e => e.RowVersion)
+                  .IsRequired()
+                  .IsRowVersion()
+                  .IsConcurrencyToken();
+
             entity.Property(e => e.Slug)
-                .IsRequired()
-                .HasMaxLength(200);
+                  .IsRequired()
+                  .HasMaxLength(200);
+
+            entity.HasIndex(x => x.Slug)
+                  .IsUnique();
+
             entity.Property(e => e.Title)
-                .IsRequired()
-                .HasMaxLength(200);
+                  .IsRequired()
+                  .HasMaxLength(200);
 
-            entity.HasOne(d => d.ParentTopic).WithMany(p => p.InverseParentTopic)
-                .HasForeignKey(d => d.ParentTopicId)
-                .HasConstraintName("FK_Topics_Parent");
+            entity.HasOne<Topic>()
+                  .WithMany()
+                  .HasForeignKey(d => d.ParentTopicId)
+                  .HasConstraintName("FK_Topics_Parent")
+                  .OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasOne(d => d.Tech).WithMany(p => p.Topics)
-                .HasForeignKey(d => d.TechId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Topics_Technology");
+            entity.HasMany(x => x.Pages)
+                  .WithOne()
+                  .HasForeignKey(y => y.TopicId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne<Technology>()
+                  .WithMany(p => p.Topics)
+                  .HasForeignKey(d => d.TechnologyId)
+                  .OnDelete(DeleteBehavior.Restrict)
+                  .HasConstraintName("FK_Topics_Technology");
+
+            entity.Navigation(x => x.Pages)
+                  .UsePropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 }

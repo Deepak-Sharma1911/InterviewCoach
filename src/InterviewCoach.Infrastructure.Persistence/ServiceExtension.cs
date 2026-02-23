@@ -28,13 +28,12 @@ namespace InterviewCoach.Infrastructure.Persistence
                   .EnableSensitiveDataLogging();
             });
             services.AddSingleton<ISystemClock, SystemClock>();
-            services.AddScoped<IPageReadRepository, PageReadRepository>();
-            services.AddScoped<IPageWriteRepository, PageWriteRepository>();
+            services.AddScoped<IPageRepository, PageRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<ITechnologyReadRepository, TechnologyReadRepository>();
-            services.AddScoped<ITechnologyWriteRepository, TechnologyWriteRepository>();
+            services.AddScoped<ITechnologyRepository, TechnologyRepository>();
+            services.AddScoped<ITechnologyRepository, TechnologyRepository>();
             services.AddScoped<ITopicRepository, TopicRepository>();
-            services.AddScoped<ITopicReadRepository, TopicReadRepository>();
+            services.AddScoped<ITopicRepository, TopicRepository>();
 
             return services;
         }

@@ -7,33 +7,36 @@ namespace InterviewCoach.Application.Feature.Topic.Commands.CreateTopicPage
     public class AddPageToTopicCommandHandler : ICommandHandler<AddPageToTopicCommand, Guid>
     {
         private readonly ILogger<AddPageToTopicCommandHandler> _logger;
-        private readonly ITopicReadRepository _topics;
-        private readonly IPageWriteRepository _writeRepository;
+        private readonly ITopicRepository _topics;
         private readonly IUnitOfWork _uow;
         private readonly ICurrentUser _user;
         private readonly ISystemClock _clock;
 
-        public AddPageToTopicCommandHandler(ILogger<AddPageToTopicCommandHandler> logger, ITopicReadRepository topics, IPageWriteRepository writeRepository, IUnitOfWork uow, ICurrentUser user, ISystemClock clock)
+        public AddPageToTopicCommandHandler(ILogger<AddPageToTopicCommandHandler> logger, ITopicRepository topics, IUnitOfWork uow, ICurrentUser user, ISystemClock clock)
         {
             _logger = logger;
             _topics = topics;
-            _writeRepository = writeRepository;
             _uow = uow;
             _user = user;
             _clock = clock;
         }
 
-        public async Task<Guid> Handle(AddPageToTopicCommand command, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(AddPageToTopicCommand command,CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Adding page to topic {TopicId} with title {Title}", command.ParentTopicId, command.Title);
-            var parentTopic = await _topics.GetTopicByIdAsync(command.ParentTopicId, cancellationToken);
-            if (parentTopic is null)
+            _logger.LogInformation(
+                "Adding page to topic {TopicId} with title {Title}",
+                command.ParentTopicId,
+                command.Title);
+            var topic = await _topics.GetByIdWithPagesAsync(command.ParentTopicId, cancellationToken);
+            if (topic is null)
             {
-                _logger.LogWarning("Parent topic with id {TopicId} not found", command.ParentTopicId);
+                _logger.LogWarning(
+                    "Topic with id {TopicId} not found",
+                    command.ParentTopicId);
+
                 throw new NotFoundException(command.ParentTopicId);
             }
-            var page = parentTopic.AddPage(command.Title, command.Slug, command.Summary, _user.UserId, _clock.UtcNow);
-            await _writeRepository.AddAsync(page, cancellationToken);
+            var page = topic.AddPage( command.Title,command.Slug,command.Summary,_user.UserId,_clock.UtcNow);
             await _uow.SaveChangesAsync(cancellationToken);
             return page.Id;
         }

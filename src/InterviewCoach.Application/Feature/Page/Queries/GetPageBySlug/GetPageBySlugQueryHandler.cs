@@ -5,16 +5,16 @@ namespace InterviewCoach.Application.Feature.Page.Queries.GetPageBySlug
 {
     public sealed class GetPageBySlugQueryHandler : IQueryHandler<GetPageBySlugQuery, PageDto>
     {
-        private readonly IPageReadRepository _readRepository;
+        private readonly IPageRepository _pageRepository;
 
-        public GetPageBySlugQueryHandler(IPageReadRepository readRepository)
+        public GetPageBySlugQueryHandler(IPageRepository pageRepository)
         {
-            _readRepository = readRepository;
+            _pageRepository = pageRepository;
         }
 
         public async Task<PageDto> Handle(GetPageBySlugQuery request, CancellationToken token)
         {
-            var page = await _readRepository.GetBySlugAsync(request.Slug, token);
+            var page = await _pageRepository.GetBySlugAsync(request.Slug, token);
 
             if (page is null)
                 return null;
@@ -31,7 +31,7 @@ namespace InterviewCoach.Application.Feature.Page.Queries.GetPageBySlug
                     .Select(x => new PageSectionDto
                     {
                         Id = x.Id,
-                        Type = (PageSectionType)x.SectionType,
+                        Type = (PageSectionTypeEnum)x.SectionType,
                         Title = x.Title,
                         Content = x.Content,
                         DisplayOrder = x.DisplayOrder

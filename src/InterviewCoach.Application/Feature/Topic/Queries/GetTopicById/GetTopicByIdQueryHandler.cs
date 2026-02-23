@@ -3,33 +3,32 @@ using Microsoft.Extensions.Logging;
 
 namespace InterviewCoach.Application.Feature.Topic.Queries.GetTopicById
 {
-    public class GetTopicByIdQueryHandler : IQueryHandler<GetTopicByIdQuery, TopicDetailsDto>
+    public class GetTopicByIdQueryHandler : IQueryHandler<GetTopicByIdQuery, TopicTreeItem>
     {
-        private readonly ILogger<GetTopicByIdQueryHandler> logger;
-        private readonly ITopicReadRepository topic;
-        private readonly IUnitOfWork unit;
-        private readonly ICurrentUser user;
-        private readonly ISystemClock systemClock;
+        private readonly ILogger<GetTopicByIdQueryHandler> _logger;
+        private readonly ITopicRepository _topicRepository;
+        private readonly IUnitOfWork _unit;
+        private readonly ICurrentUser _user;
+        private readonly ISystemClock _systemClock;
 
 
-        public GetTopicByIdQueryHandler(ILogger<GetTopicByIdQueryHandler> logger, ITopicReadRepository topic, IUnitOfWork unit, ICurrentUser user, ISystemClock systemClock)
+        public GetTopicByIdQueryHandler(ILogger<GetTopicByIdQueryHandler> logger, ITopicRepository topicRepository, IUnitOfWork unit, ICurrentUser user, ISystemClock systemClock)
         {
-            this.logger = logger;
-            this.topic = topic;
-            this.unit = unit;
-            this.user = user;
-            this.systemClock = systemClock;
+            _logger = logger;
+            _topicRepository = topicRepository;
+            _unit = unit;
+            _user = user;
+            _systemClock = systemClock;
         }
-        public async Task<TopicDetailsDto> Handle(GetTopicByIdQuery request, CancellationToken cancellationToken)
+        public async Task<TopicTreeItem> Handle(GetTopicByIdQuery request, CancellationToken cancellationToken)
         {
-            logger.LogInformation("Handling {QueryName} with TopicId: {TopicId}", nameof(GetTopicByIdQuery), request.TopicId);
-            var topicEntity = await topic.GetByIdAsync(request.TopicId, cancellationToken);
+            _logger.LogInformation("Handling {QueryName} with TopicId: {TopicId}", nameof(GetTopicByIdQuery), request.TopicId);
+            var topicEntity = await _topicRepository.GetRootTreeByIdAsync(request.TopicId, cancellationToken);
             if (topicEntity is null)
             {
-                logger.LogWarning("Topic with ID {TopicId} not found.", request.TopicId);
+                _logger.LogWarning("Topic with ID {TopicId} not found.", request.TopicId);
                 return null;
             }
-            logger.LogInformation("Successfully retrieved topic with ID {TopicId}.", request.TopicId);
             return topicEntity;
         }
     }

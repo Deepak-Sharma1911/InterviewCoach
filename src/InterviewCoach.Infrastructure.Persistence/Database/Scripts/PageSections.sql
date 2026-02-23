@@ -15,6 +15,8 @@ CREATE TABLE [ic].[PageSections](
 	[Title] [nvarchar](200) NOT NULL,
 	[Content] [nvarchar](max) NOT NULL,
 	[DisplayOrder] [int] NOT NULL,
+	[IsActive] [bit] NOT NULL,
+	[RowVersion] rowversion NOT NULL,
 	[CreatedBy] [uniqueidentifier] NOT NULL,
 	[CreatedUtcDate] [datetime2](7) NOT NULL,
 	[LastModifiedBy] [uniqueidentifier] NULL,

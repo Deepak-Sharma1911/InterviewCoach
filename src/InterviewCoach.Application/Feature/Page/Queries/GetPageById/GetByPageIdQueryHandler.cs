@@ -5,20 +5,18 @@ namespace InterviewCoach.Application.Feature.Page.Queries.GetPageById
 {
     public class GetByPageIdQueryHandler : IQueryHandler<GetByPageIdQuery, PageDto>
     {
-        private readonly IPageReadRepository _readRepository;
+        private readonly IPageRepository _pageRepository;
 
-        public GetByPageIdQueryHandler(IPageReadRepository readRepository)
+        public GetByPageIdQueryHandler(IPageRepository pageRepository)
         {
-            _readRepository = readRepository;
+            _pageRepository = pageRepository;
         }
 
         public async Task<PageDto> Handle(GetByPageIdQuery request, CancellationToken token)
         {
-            var page = await _readRepository.GetByIdAsync(request.pageId, token);
-
+            var page = await _pageRepository.GetByIdWithSectionsAsync(request.pageId, token);
             if (page is null)
                 return null;
-
             return new PageDto
             {
                 Id = page.Id,
@@ -31,7 +29,7 @@ namespace InterviewCoach.Application.Feature.Page.Queries.GetPageById
                     .Select(x => new PageSectionDto
                     {
                         Id = x.Id,
-                        Type = (PageSectionType)x.SectionType,
+                        Type = (PageSectionTypeEnum)x.SectionType,
                         Title = x.Title,
                         Content = x.Content,
                         DisplayOrder = x.DisplayOrder

@@ -14,11 +14,9 @@
             _dateTimeProvider = clock;
             _userContextService = user;
         }
-
         public async Task<Guid> Handle(CreateRootTopicCommand request, CancellationToken cancellationToken)
         {
-
-            var topic = TopicDomain.Topic.Create(request.Title, request.Slug, request.DisplayOrder, request.ParentTopicId, request.TechnologyId, _userContextService.UserId, _dateTimeProvider.UtcNow);
+            var topic = TopicDomain.Topic.Create(request.TechnologyId, request.Title, request.Slug, request.ParentTopicId, request.DisplayOrder, _userContextService.UserId, _dateTimeProvider.UtcNow);
             await _topicRepository.AddAsync(topic, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             return topic.Id;
