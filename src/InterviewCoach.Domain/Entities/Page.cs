@@ -28,7 +28,7 @@ namespace InterviewCoach.Domain.Entities
             CreatedUtcDate = utcNow;
             LastUtcModified = utcNow;
         }
-        public void AddSection(int sectionType, string title, string content, int displayOrder, Guid userId, DateTime utcNow)
+        public void AddSection(PageSectionType sectionType, string title, string content, int displayOrder, Guid userId, DateTime utcNow)
         {
             if (_sections.Any(s => s.DisplayOrder == displayOrder))
                 throw new InvalidOperationException("Duplicate section order.");

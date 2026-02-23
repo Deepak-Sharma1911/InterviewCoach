@@ -12,7 +12,6 @@ public partial class ApplicationContext : DbContext
     public DbSet<Topic> Topics => Set<Topic>();
     public DbSet<Page> Pages => Set<Page>();
     public DbSet<PageSection> PageSections => Set<PageSection>();
-    public DbSet<PageSectionType> PageSectionTypes => Set<PageSectionType>();
     public DbSet<Technology> Technology => Set<Technology>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

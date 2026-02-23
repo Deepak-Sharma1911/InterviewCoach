@@ -22,7 +22,7 @@ namespace InterviewCoach.Application.Feature.Page.Commands.CreatePageSection
         public async Task<Unit> Handle(AddPageSectionCommand request, CancellationToken token)
         {
             var page = await _pageRepository.GetByIdAsync(request.PageId, token) ?? throw new NotFoundException(request.PageId);
-            page.AddSection((int)request.Type,request.Title,request.Content,request.DisplayOrder,_currentUser.UserId,_dateTime.UtcNow);
+            page.AddSection(request.Type,request.Title,request.Content,request.DisplayOrder,_currentUser.UserId,_dateTime.UtcNow);
             await _unitOfWork.SaveChangesAsync(token);  
             return Unit.Value;
         }

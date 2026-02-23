@@ -46,7 +46,7 @@ namespace InterviewCoach.Infrastructure.Persistence.Configurations
 
             entity.HasOne<Technology>()
                   .WithMany(p => p.Topics)
-                  .HasForeignKey(d => d.TechnologyId)
+                  .HasForeignKey(d => d.TechId)
                   .OnDelete(DeleteBehavior.Restrict)
                   .HasConstraintName("FK_Topics_Technology");
 

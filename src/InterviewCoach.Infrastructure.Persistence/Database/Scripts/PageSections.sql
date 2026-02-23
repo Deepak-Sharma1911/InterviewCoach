@@ -11,7 +11,7 @@ GO
 CREATE TABLE [ic].[PageSections](
 	[Id] [uniqueidentifier] NOT NULL,
 	[PageId] [uniqueidentifier] NOT NULL,
-	[SectionType] [uniqueidentifier] NOT NULL,
+	[SectionType] [nvarchar](20) NOT NULL,
 	[Title] [nvarchar](200) NOT NULL,
 	[Content] [nvarchar](max) NOT NULL,
 	[DisplayOrder] [int] NOT NULL,
@@ -40,12 +40,6 @@ GO
 ALTER TABLE [ic].[PageSections] CHECK CONSTRAINT [FK_PageSections_Pages]
 GO
 
-ALTER TABLE [ic].[PageSections]  WITH CHECK ADD  CONSTRAINT [FK_PageSections_SectionTypes] FOREIGN KEY([SectionType])
-REFERENCES [ic].[PageSectionTypes] ([Id])
-GO
-
-ALTER TABLE [ic].[PageSections] CHECK CONSTRAINT [FK_PageSections_SectionTypes]
-GO
 
 CREATE UNIQUE INDEX index_name
 ON [ic].[PageSections] ([PageId],[DisplayOrder]);

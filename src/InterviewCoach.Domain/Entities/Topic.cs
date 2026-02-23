@@ -5,7 +5,7 @@ namespace InterviewCoach.Domain.Entities
 {
     public sealed class Topic : Entity<Guid>
     {
-        public Guid TechnologyId { get; private set; }
+        public Guid TechId { get; private set; }
         public string Title { get; private set; }
         public string Slug { get; private set; }
         public Guid? ParentTopicId { get; private set; }
@@ -19,7 +19,7 @@ namespace InterviewCoach.Domain.Entities
         internal Topic(Guid technologyId, string title, string slug, Guid? parentTopicId, int displayOrder, Guid userId, DateTime utcNow)
         {
             Id = Guid.NewGuid();
-            TechnologyId = technologyId;
+            TechId = technologyId;
             Title = title;
             Slug = slug;
             ParentTopicId = parentTopicId;
@@ -34,7 +34,7 @@ namespace InterviewCoach.Domain.Entities
             return new Topic
             {
                 Id = Guid.NewGuid(),
-                TechnologyId = technologyId,
+                TechId = technologyId,
                 Title = title,
                 Slug = slug,
                 ParentTopicId = parentTopicId,

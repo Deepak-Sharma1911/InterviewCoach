@@ -26,7 +26,6 @@ namespace InterviewCoach.Infrastructure.Persistence.Repository
         public async Task<Technology> GetByIdAsync(Guid id, CancellationToken token)
         {
             var efEntity = await _context.Technology
-                                         .AsNoTracking()
                                          .OrderBy(x => x.Id)
                                          .Where(x => x.IsActive)
                                          .FirstOrDefaultAsync(x => x.Id == id, token);

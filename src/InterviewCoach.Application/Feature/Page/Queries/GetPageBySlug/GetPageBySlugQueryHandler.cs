@@ -31,7 +31,8 @@ namespace InterviewCoach.Application.Feature.Page.Queries.GetPageBySlug
                     .Select(x => new PageSectionDto
                     {
                         Id = x.Id,
-                        Type = (PageSectionTypeEnum)x.SectionType,
+                        Type = x.SectionType,
+
                         Title = x.Title,
                         Content = x.Content,
                         DisplayOrder = x.DisplayOrder

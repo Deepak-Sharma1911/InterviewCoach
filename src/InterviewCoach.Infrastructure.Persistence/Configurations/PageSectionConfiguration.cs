@@ -34,11 +34,6 @@ namespace InterviewCoach.Infrastructure.Persistence.Configurations
                   .HasForeignKey(x => x.PageId)
                   .OnDelete(DeleteBehavior.Cascade)
                   .HasConstraintName("FK_PageSections_Pages");
-
-            entity.HasOne<PageSectionType>().WithMany()
-                  .HasForeignKey(d => d.SectionType)
-                  .OnDelete(DeleteBehavior.Restrict)
-                  .HasConstraintName("FK_PageSections_SectionTypes");
         }
     }
 }

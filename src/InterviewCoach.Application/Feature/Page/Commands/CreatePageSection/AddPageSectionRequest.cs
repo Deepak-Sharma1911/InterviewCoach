@@ -2,5 +2,5 @@
 
 namespace InterviewCoach.Application.Feature.Page.Commands.CreatePageSection
 {
-    public record AddPageSectionRequest(PageSectionTypeEnum Type, string Title, string Content, int DisplayOrder);
+    public record AddPageSectionRequest(PageSectionType Type, string Title, string Content, int DisplayOrder);
 }
