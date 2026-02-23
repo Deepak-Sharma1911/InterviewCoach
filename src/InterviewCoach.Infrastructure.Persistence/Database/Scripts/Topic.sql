@@ -19,7 +19,7 @@ CREATE TABLE [ic].[Topics](
 	[RowVersion] rowversion NOT NULL,
 	[CreatedBy] [uniqueidentifier] NOT NULL,
 	[CreatedUtcDate] [datetime2](7) NOT NULL,
-	[LastModifiedBy] [uniqueidentifier] NULL,
+	[LastModifiedBy] [uniqueidentifier] NOT NULL,
 	[LastUtcModified] [datetime2](7) NOT NULL,
  CONSTRAINT [PK_Topics] PRIMARY KEY CLUSTERED 
 (
@@ -28,19 +28,10 @@ CREATE TABLE [ic].[Topics](
 ) ON [PRIMARY]
 GO
 
-ALTER TABLE [ic].[Topics] ADD  DEFAULT (newid()) FOR [Id]
-GO
-
 ALTER TABLE [ic].[Topics] ADD  DEFAULT ((0)) FOR [DisplayOrder]
 GO
 
 ALTER TABLE [ic].[Topics] ADD  DEFAULT ((1)) FOR [IsActive]
-GO
-
-ALTER TABLE [ic].[Topics] ADD  DEFAULT (sysutcdatetime()) FOR [CreatedUtcDate]
-GO
-
-ALTER TABLE [ic].[Topics] ADD  DEFAULT (sysutcdatetime()) FOR [LastUtcModified]
 GO
 
 ALTER TABLE [ic].[Topics]  WITH CHECK ADD  CONSTRAINT [FK_Topics_Parent] FOREIGN KEY([ParentTopicId])
@@ -51,5 +42,9 @@ ALTER TABLE [ic].[Topics] CHECK CONSTRAINT [FK_Topics_Parent]
 GO
 ALTER TABLE [ic].[Topics] ADD  CONSTRAINT [FK_Topics_Technology] FOREIGN KEY([TechId])
 REFERENCES [ic].[Technology] ([Id])
+GO
+
+CREATE UNIQUE INDEX index_name
+ON [ic].[Topics]  ([Slug]);
 
 

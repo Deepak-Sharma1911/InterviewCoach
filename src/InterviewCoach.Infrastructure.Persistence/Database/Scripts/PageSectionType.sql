@@ -9,8 +9,16 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE TABLE [ic].[PageSectionTypes](
-	[Id] [int] NOT NULL,
+	[Id] [uniqueidentifier] NOT NULL,
 	[Name] [nvarchar](50) NOT NULL,
+	[Code] [nvarchar](50) NOT NULL,
+	[IsActive] [bit] NOT NULL,
+	[RowVersion] rowversion NOT NULL,
+	[CreatedBy] [uniqueidentifier] NOT NULL,
+	[CreatedUtcDate] [datetime2](7) NOT NULL,
+	[LastModifiedBy] [uniqueidentifier]NOT  NULL,
+	[LastUtcModified] [datetime2](7) NOT NULL
+
  CONSTRAINT [PK_PageSectionTypes] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -18,10 +26,13 @@ CREATE TABLE [ic].[PageSectionTypes](
 ) ON [PRIMARY]
 GO
 
-
-INSERT INTO ic.PageSectionTypes (Id, Name) VALUES
-(1, 'Text'),
-(2, 'Code'),
-(3, 'InfoBox'),
-(4, 'Comparison'),
-(5, 'InterviewQuestions');
+ALTER TABLE [ic].[PageSectionTypes] ADD  DEFAULT ((1)) FOR [IsActive]
+GO
+CREATE UNIQUE INDEX index_name
+ON [ic].[PageSectionTypes] ([Name],[Code]);
+--INSERT INTO ic.PageSectionTypes (Id, Name) VALUES
+--(1, 'Text'),
+--(2, 'Code'),
+--(3, 'InfoBox'),
+--(4, 'Comparison'),
+--(5, 'InterviewQuestions');

@@ -19,7 +19,7 @@ CREATE TABLE [ic].[Pages](
 	[RowVersion] rowversion NOT NULL,
 	[CreatedBy] [uniqueidentifier] NOT NULL,
 	[CreatedUtcDate] [datetime2](7) NOT NULL,
-	[LastModifiedBy] [uniqueidentifier] NULL,
+	[LastModifiedBy] [uniqueidentifier]NOT  NULL,
 	[LastUtcModified] [datetime2](7) NOT NULL,
  CONSTRAINT [PK_Pages] PRIMARY KEY CLUSTERED 
 (
@@ -28,16 +28,8 @@ CREATE TABLE [ic].[Pages](
 ) ON [PRIMARY]
 GO
 
-ALTER TABLE [ic].[Pages] ADD  DEFAULT (newid()) FOR [Id]
-GO
 
 ALTER TABLE [ic].[Pages] ADD  DEFAULT ((0)) FOR [IsPublished]
-GO
-
-ALTER TABLE [ic].[Pages] ADD  DEFAULT (sysutcdatetime()) FOR [CreatedUtcDate]
-GO
-
-ALTER TABLE [ic].[Pages] ADD  DEFAULT (sysutcdatetime()) FOR [LastUtcModified]
 GO
 
 ALTER TABLE [ic].[Pages]  WITH CHECK ADD  CONSTRAINT [FK_Pages_Topics] FOREIGN KEY([TopicId])
@@ -47,5 +39,9 @@ GO
 
 ALTER TABLE [ic].[Pages] CHECK CONSTRAINT [FK_Pages_Topics]
 GO
+
+CREATE UNIQUE INDEX index_name
+ON [ic].[Pages]  ([TopicId],[Slug]);
+
 
 
