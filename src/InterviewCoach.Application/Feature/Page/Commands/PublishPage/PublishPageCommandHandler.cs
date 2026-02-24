@@ -23,7 +23,7 @@ namespace InterviewCoach.Application.Feature.Page.Commands.PublishPage
         }
         public async Task<Unit> Handle(PublishPageCommand request, CancellationToken token)
         {
-            var page = await _pageRepository.GetByIdAsync(request.PageId, token) ?? throw new NotFoundException(request.PageId);
+            var page = await _pageRepository.GetByIdWithSectionsAsync(request.PageId, token) ?? throw new NotFoundException(request.PageId);
             page.Publish(_currentUser.UserId, _dateTime.UtcNow);
             await _unitOfWork.SaveChangesAsync(token);
             return Unit.Value;

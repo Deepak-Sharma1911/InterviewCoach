@@ -17,6 +17,8 @@ namespace InterviewCoach.Infrastructure.Persistence.Configurations
 
             entity.Property(e => e.LastUtcModified).IsRequired();
 
+            entity.Property(e => e.IsActive).HasDefaultValue(true);
+
             entity.Property(e => e.RowVersion)
                   .IsRequired()
                   .IsRowVersion()
@@ -34,6 +36,8 @@ namespace InterviewCoach.Infrastructure.Persistence.Configurations
                   .HasForeignKey(x => x.PageId)
                   .OnDelete(DeleteBehavior.Cascade)
                   .HasConstraintName("FK_PageSections_Pages");
+
+            entity.Property(x=>x.SectionType).HasConversion<string>().HasMaxLength(20);
         }
     }
 }
