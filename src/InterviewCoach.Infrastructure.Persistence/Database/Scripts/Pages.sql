@@ -31,7 +31,8 @@ GO
 
 ALTER TABLE [ic].[Pages] ADD  DEFAULT ((0)) FOR [IsPublished]
 GO
-
+ALTER TABLE  [ic].[Pages] ADD  DEFAULT ((1)) FOR [IsActive]
+go
 ALTER TABLE [ic].[Pages]  WITH CHECK ADD  CONSTRAINT [FK_Pages_Topics] FOREIGN KEY([TopicId])
 REFERENCES [ic].[Topics] ([Id])
 ON DELETE CASCADE

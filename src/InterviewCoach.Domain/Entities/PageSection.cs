@@ -9,7 +9,7 @@ namespace InterviewCoach.Domain.Entities
         public string Title { get; private set; }
         public string Content { get; private set; }
         public int DisplayOrder { get; private set; }
-        public bool IsActive { get; private set; }
+        public bool IsActive { get; private set; } = true;
         public byte[] RowVersion { get; private set; }
         private PageSection() { }
         internal PageSection(Guid pageId, PageSectionType sectionType, string title, string content, int displayOrder, Guid userId, DateTime utcNow)
@@ -45,6 +45,13 @@ namespace InterviewCoach.Domain.Entities
             Content = content;
             DisplayOrder = displayOrder;
             LastModifiedBy = modifiedBy;
+            LastUtcModified = utcNow;
+        }
+
+        public void SoftDeletePageSection(Guid userId, DateTime utcNow)
+        {
+            IsActive = false;
+            LastModifiedBy = userId;
             LastUtcModified = utcNow;
         }
 

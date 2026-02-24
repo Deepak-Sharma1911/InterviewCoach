@@ -15,6 +15,8 @@ namespace InterviewCoach.Infrastructure.Persistence.Configurations
 
             entity.Property(e => e.LastUtcModified).IsRequired();
 
+            entity.Property(e => e.IsActive).HasDefaultValue(true);
+
             entity.Property(e => e.RowVersion)
                   .IsRequired()
                   .IsRowVersion()

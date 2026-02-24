@@ -12,7 +12,7 @@ namespace InterviewCoach.Domain.Entities
         public string Slug { get; private set; }
         public string Summary { get; private set; }
         public bool IsPublished { get; private set; }
-        public bool IsActive { get; private set; }
+        public bool IsActive { get; private set; } = true;
         public byte[] RowVersion { get; private set; }
         public IReadOnlyCollection<PageSection> Sections => _sections;
         private Page() { }
@@ -85,25 +85,25 @@ namespace InterviewCoach.Domain.Entities
         public void RemoveSection(Guid sectionId, Guid modifiedBy, DateTime utcNow)
         {
             var section = _sections
-                .FirstOrDefault(s => s.Id == sectionId);
-
-            if (section is null)
-                throw new DomainException("Section not found.");
-
-            _sections.Remove(section);
-
+                .FirstOrDefault(s => s.Id == sectionId) ?? throw new DomainException("Section not found.");
+            // _sections.Remove(section); will continue with soft delete approach
+            section.SoftDeletePageSection(modifiedBy, utcNow);
+            LastModifiedBy = modifiedBy;
+            LastUtcModified = utcNow;
+        }
+        public void UpdateSection(Guid sectionId, string title, string content, int displayOrder, Guid modifiedBy, DateTime utcNow)
+        {
+            var section = _sections
+                .FirstOrDefault(s => s.Id == sectionId) ?? throw new DomainException("Section not found.");
+            section.Update(title, content, displayOrder, modifiedBy, utcNow);
             LastModifiedBy = modifiedBy;
             LastUtcModified = utcNow;
         }
 
-        public void UpdateSection(Guid sectionId, string title, string content, int displayOrder, Guid modifiedBy, DateTime utcNow)
+        public void SoftDeletePage(Guid userId, DateTime utcNow)
         {
-            var section = _sections
-                .FirstOrDefault(s => s.Id == sectionId);
-            if (section is null)
-                throw new DomainException("Section not found.");
-            section.Update(title, content, displayOrder, modifiedBy, utcNow);
-            LastModifiedBy = modifiedBy;
+            IsActive = false;
+            LastModifiedBy = userId;
             LastUtcModified = utcNow;
         }
     }

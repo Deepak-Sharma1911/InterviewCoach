@@ -1,6 +1,7 @@
 ﻿using InterviewCoach.API.Infrastructure;
 using InterviewCoach.API.Services;
 using InterviewCoach.Application.Abstractions;
+using System.Text.Json.Serialization;
 
 namespace InterviewCoach.API
 {
@@ -10,7 +11,12 @@ namespace InterviewCoach.API
         {
             services.AddHttpContextAccessor();
             services.AddScoped<ICurrentUser, CurrentUser>();
-            services.AddControllers();
+            services.AddControllers()
+                    .AddJsonOptions(options =>
+                    {
+                        options.JsonSerializerOptions.Converters
+                          .Add(new JsonStringEnumConverter());
+                    });
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
             services.AddSwaggerGenWithAuth();
@@ -20,7 +26,10 @@ namespace InterviewCoach.API
         public static IServiceCollection AddSwaggerGenWithAuth(this IServiceCollection services)
         {
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(options =>
+            {
+                options.UseInlineDefinitionsForEnums();
+            });
             return services;
         }
 

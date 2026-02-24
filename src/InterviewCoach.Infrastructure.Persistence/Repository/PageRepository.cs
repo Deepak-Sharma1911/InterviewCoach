@@ -27,7 +27,6 @@ namespace InterviewCoach.Infrastructure.Persistence.Repository
         {
             return await _context.Pages.FirstOrDefaultAsync(p => p.Id == id, token);
         }
-
         public async Task<Page> GetByIdWithSectionsAsync(Guid id, CancellationToken token)
         {
             return await _context.Pages.Include(p => p.Sections).FirstOrDefaultAsync(p => p.Id == id, token);
