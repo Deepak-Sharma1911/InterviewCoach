@@ -11,3 +11,4 @@ namespace InterviewCoach.Application.Wrappers.ReadModels
         public int DisplayOrder { get; init; }
     }
 }
+        

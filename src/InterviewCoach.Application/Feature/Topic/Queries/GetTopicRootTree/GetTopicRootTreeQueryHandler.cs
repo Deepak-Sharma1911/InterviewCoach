@@ -1,6 +1,4 @@
-﻿using InterviewCoach.Application.Feature.Topic.Queries.GetTopicById;
-using InterviewCoach.Application.Wrappers.ReadModels;
-using InterviewCoach.Domain.Entities;
+﻿using InterviewCoach.Application.Wrappers.ReadModels;
 using Microsoft.Extensions.Logging;
 
 namespace InterviewCoach.Application.Feature.Topic.Queries.GetTopicRootTree
@@ -8,16 +6,16 @@ namespace InterviewCoach.Application.Feature.Topic.Queries.GetTopicRootTree
     public class GetTopicRootTreeQueryHandler : IQueryHandler<GetTopicRootTreeQuery, IReadOnlyList<TopicTreeItem>>
     {
         private readonly ILogger<GetTopicRootTreeQueryHandler> _logger;
-        private readonly ITopicReadRepository _topicRead;
-        public GetTopicRootTreeQueryHandler(ILogger<GetTopicRootTreeQueryHandler> logger, ITopicReadRepository topicRead)
+        private readonly ITopicRepository _topicRepository;
+        public GetTopicRootTreeQueryHandler(ILogger<GetTopicRootTreeQueryHandler> logger, ITopicRepository topicRepository)
         {
             _logger = logger;
-            _topicRead = topicRead;
+            _topicRepository = topicRepository;
         }
         public async Task<IReadOnlyList<TopicTreeItem>> Handle(GetTopicRootTreeQuery request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Get All the Topics");
-            return await _topicRead.GetRootTreeAsync(cancellationToken);
+            return await _topicRepository.GetRootTreeAsync(cancellationToken);
         }
     }
 }

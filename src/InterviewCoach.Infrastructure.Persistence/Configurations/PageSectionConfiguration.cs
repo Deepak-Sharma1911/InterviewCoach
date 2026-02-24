@@ -1,4 +1,4 @@
-﻿using InterviewCoach.Infrastructure.Persistence.Database.Entities;
+﻿using InterviewCoach.Domain.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace InterviewCoach.Infrastructure.Persistence.Configurations
@@ -9,22 +9,31 @@ namespace InterviewCoach.Infrastructure.Persistence.Configurations
         {
             entity.ToTable("PageSections", "ic");
 
-            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.Id).ValueGeneratedNever();
+
             entity.Property(e => e.Content).IsRequired();
-            entity.Property(e => e.CreatedUtcDate).HasDefaultValueSql("(sysutcdatetime())");
-            entity.Property(e => e.LastUtcModified).HasDefaultValueSql("(sysutcdatetime())");
+
+            entity.Property(e => e.CreatedUtcDate).IsRequired();
+
+            entity.Property(e => e.LastUtcModified).IsRequired();
+
+            entity.Property(e => e.RowVersion)
+                  .IsRequired()
+                  .IsRowVersion()
+                  .IsConcurrencyToken();
+
             entity.Property(e => e.Title)
-                .IsRequired()
-                .HasMaxLength(200);
+                  .IsRequired()
+                  .HasMaxLength(200);
 
-            entity.HasOne(d => d.Page).WithMany(p => p.PageSections)
-                .HasForeignKey(d => d.PageId)
-                .HasConstraintName("FK_PageSections_Pages");
+            entity.HasIndex(x => new { x.PageId, x.DisplayOrder})
+                  .IsUnique();
 
-            entity.HasOne(d => d.SectionTypeNavigation).WithMany(p => p.PageSections)
-                .HasForeignKey(d => d.SectionType)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PageSections_SectionTypes");
+            entity.HasOne<Page>()
+                  .WithMany(p => p.Sections)
+                  .HasForeignKey(x => x.PageId)
+                  .OnDelete(DeleteBehavior.Cascade)
+                  .HasConstraintName("FK_PageSections_Pages");
         }
     }
 }

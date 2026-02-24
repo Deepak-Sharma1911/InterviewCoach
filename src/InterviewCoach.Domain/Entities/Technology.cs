@@ -1,102 +1,81 @@
 ﻿using InterviewCoach.Domain.Common;
-using InterviewCoach.Domain.Exceptions;
 
 namespace InterviewCoach.Domain.Entities
 {
-    public sealed class Technology : Entity<Guid>
+    public  class Technology : Entity<Guid>
     {
-        public string Title { get; set; }
-        public string Slug { get; set; }
-        public int DisplayOrder { get; set; }
-        public bool IsActive { get; set; }
-
         private readonly List<Topic> _topics = new();
-        public IReadOnlyCollection<Topic> Topics => _topics.AsReadOnly();
-        //For Rehydration
+        public string Title { get; private set; }
+        public string Slug { get; private set; }
+        public int DisplayOrder { get; private set; }
+        public bool IsActive { get; private set; }
+        public byte[] RowVersion { get; private set; }
+        public IReadOnlyCollection<Topic> Topics => _topics;
         private Technology() { }
-
-        private Technology(Guid id, string title, string slug, int displayOrder, Guid createdBy, DateTime createdUtc)
+        public Technology(string title, string slug, int displayOrder, Guid userId, DateTime utcNow)
         {
-            Id = id;
-            SetTitle(title);
-            SetSlug(slug);
+            Id = Guid.NewGuid();
+            Title = title;
+            Slug = slug;
             DisplayOrder = displayOrder;
             IsActive = true;
-            CreatedBy = createdBy;
-            CreatedUtcDate = createdUtc;
+            CreatedBy = userId;
+            CreatedUtcDate = utcNow;
+            LastUtcModified = utcNow;
         }
-
-        public static Technology Create(string title, string slug, int displayOrder, Guid createdBy, DateTime utcNow)
+        public static Technology Create(string title, string slug, int displayOrder, Guid userId, DateTime utcNow)
         {
-            return new Technology(
-                Guid.NewGuid(),
-                title,
-                slug,
-                displayOrder,
-                createdBy,
-                utcNow);
-        }
+            if (string.IsNullOrWhiteSpace(title))
+                throw new ArgumentException("Title is required.");
 
-        public static Technology Rehydrate(Guid id, string title, string slug, int displayOrder,
-                                              bool isActive,
-                                              Guid createdBy,
-                                              DateTime createdUtc,
-                                              Guid? lastModifiedBy,
-                                              DateTime lastModifiedUtc)
-        {
-            var tech = new Technology
+            if (string.IsNullOrWhiteSpace(slug))
+                throw new ArgumentException("Slug is required.");
+
+            return new Technology
             {
-                Id = id,
+                Id = Guid.NewGuid(),
                 Title = title,
                 Slug = slug,
                 DisplayOrder = displayOrder,
-                IsActive = isActive,
-                CreatedBy = createdBy,
-                CreatedUtcDate = createdUtc,
-                LastModifiedBy = lastModifiedBy,
-                LastUtcModified = lastModifiedUtc
+                IsActive = true,
+                CreatedBy = userId,
+                CreatedUtcDate = utcNow,
+                LastUtcModified = utcNow
             };
-
-            return tech;
         }
-
-        public void Update(string title, string slug, int displayOrder, Guid modifiedBy, DateTime utcNow)
+        public void Update(string title, string slug, int displayOrder, Guid userId, DateTime utcNow)
         {
-            SetTitle(title);
-            SetSlug(slug);
+            Title = title;
+            Slug = slug;
             DisplayOrder = displayOrder;
-            LastModifiedBy = modifiedBy;
+            LastModifiedBy = userId;
             LastUtcModified = utcNow;
         }
-
-        public void Activate(Guid modifiedBy, DateTime utcNow)
+        public Topic AddTopic(string title, string slug, Guid? parentTopicId, int displayOrder, Guid userId, DateTime utcNow)
         {
-            IsActive = true;
-            LastModifiedBy = modifiedBy;
+            if (_topics.Any(t => t.Slug == slug))
+                throw new InvalidOperationException("Duplicate topic slug.");
+
+            if (parentTopicId.HasValue && !_topics.Any(t => t.Id == parentTopicId))
+                throw new InvalidOperationException("Parent topic not found.");
+
+            var topic = new Topic(Id, title, slug, parentTopicId, displayOrder, userId, utcNow);
+            _topics.Add(topic);
+            LastModifiedBy = userId;
+            LastUtcModified = utcNow;
+            return topic;
+        }
+        public void Rename(string title, Guid userId, DateTime utcNow)
+        {
+            Title = title;
+            LastModifiedBy = userId;
             LastUtcModified = utcNow;
         }
-
-        public void Deactivate(Guid modifiedBy, DateTime utcNow)
+        public void Deactivate(Guid userId, DateTime utcNow)
         {
             IsActive = false;
-            LastModifiedBy = modifiedBy;
+            LastModifiedBy = userId;
             LastUtcModified = utcNow;
-        }
-
-        private void SetTitle(string title)
-        {
-            if (string.IsNullOrWhiteSpace(title))
-                throw new DomainException("Technology title is required.");
-
-            Title = title.Trim();
-        }
-
-        private void SetSlug(string slug)
-        {
-            if (string.IsNullOrWhiteSpace(slug))
-                throw new DomainException("Technology slug is required.");
-
-            Slug = slug.Trim().ToLowerInvariant();
         }
     }
 }

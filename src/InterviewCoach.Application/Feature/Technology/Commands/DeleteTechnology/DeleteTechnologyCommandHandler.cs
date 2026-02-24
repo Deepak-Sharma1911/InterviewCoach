@@ -7,23 +7,20 @@ namespace InterviewCoach.Application.Feature.Technology.Commands.DeleteTechnolog
     public sealed class DeleteTechnologyCommandHandler : ICommandHandler<DeleteTechnologyCommand>
     {
         private readonly ILogger<DeleteTechnologyCommandHandler> _logger;
-        private readonly ITechnologyReadRepository _readRepository;
-        private readonly ITechnologyWriteRepository _writeRepository;
+        private readonly ITechnologyRepository _techRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICurrentUser _currentUser;
         private readonly ISystemClock _dateTime;
 
         public DeleteTechnologyCommandHandler(
             ILogger<DeleteTechnologyCommandHandler> logger,
-            ITechnologyReadRepository readRepository,
-            ITechnologyWriteRepository writeRepository,
+            ITechnologyRepository techRepository,
             IUnitOfWork unitOfWork,
             ICurrentUser currentUser,
             ISystemClock dateTime)
         {
             _logger = logger;
-            _readRepository = readRepository;
-            _writeRepository = writeRepository;
+            _techRepository = techRepository;
             _unitOfWork = unitOfWork;
             _currentUser = currentUser;
             _dateTime = dateTime;
@@ -31,9 +28,8 @@ namespace InterviewCoach.Application.Feature.Technology.Commands.DeleteTechnolog
 
         public async Task<Unit> Handle(DeleteTechnologyCommand request, CancellationToken cancellationToken)
         {
-            var technology = await _readRepository.GetByIdAsync(request.Id, cancellationToken) ?? throw new NotFoundException("Technology not found.");
+            var technology = await _techRepository.GetByIdAsync(request.Id, cancellationToken) ?? throw new NotFoundException("Technology not found.");
             technology.Deactivate(_currentUser.UserId, _dateTime.UtcNow);
-            await _writeRepository.UpdateAsync(technology, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

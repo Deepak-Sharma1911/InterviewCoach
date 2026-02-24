@@ -5,114 +5,87 @@ namespace InterviewCoach.Domain.Entities
 {
     public sealed class Topic : Entity<Guid>
     {
-        private readonly List<Page> _pages = new();
+        public Guid TechId { get; private set; }
+        public string Title { get; private set; }
+        public string Slug { get; private set; }
         public Guid? ParentTopicId { get; private set; }
-        public string Title { get; private set; } = null!;
-        public string Slug { get; private set; } = null!;
         public int DisplayOrder { get; private set; }
         public bool IsActive { get; private set; }
-        public Guid TechId { get; private set; }
-        public IReadOnlyCollection<Page> Pages => _pages.AsReadOnly();
+        public byte[] RowVersion { get; private set; }
+
+        private readonly List<Page> _pages = new();
+        public IReadOnlyCollection<Page> Pages => _pages;
         private Topic() { }
-        public static Topic Create(
-            string title,
-            string slug,
-            int displayOrder,
-            Guid? parentTopicId,
-            Guid techId,
-            Guid createdBy,
-            DateTime utcNow)
+        internal Topic(Guid technologyId, string title, string slug, Guid? parentTopicId, int displayOrder, Guid userId, DateTime utcNow)
         {
-            Validate(title, slug);
-
-            var topic = new Topic
-            {
-                Id = Guid.NewGuid(),
-                Title = title,
-                Slug = slug,
-                DisplayOrder = displayOrder,
-                ParentTopicId = parentTopicId,
-                IsActive = true,
-                TechId = techId
-            };
-
-            topic.SetCreated(createdBy, utcNow);
-            return topic;
+            Id = Guid.NewGuid();
+            TechId = technologyId;
+            Title = title;
+            Slug = slug;
+            ParentTopicId = parentTopicId;
+            DisplayOrder = displayOrder;
+            IsActive = true;
+            CreatedBy = userId;
+            CreatedUtcDate = utcNow;
+            LastUtcModified = utcNow;
         }
-
-        public Page AddPage(
-            string title,
-            string slug,
-            string? summary,
-            Guid createdBy,
-            DateTime utcNow)
-        {
-            if (!IsActive)
-                throw new DomainException("Cannot add page to inactive topic.");
-
-            if (_pages.Any(p => p.Slug == slug))
-                throw new DomainException("Duplicate page slug.");
-
-            var page = Page.Create(Id, title, slug, summary, createdBy, utcNow);
-            _pages.Add(page);
-
-            SetModified(createdBy, utcNow);
-            return page;
-        }
-
-        private static void Validate(string title, string slug)
-        {
-            if (string.IsNullOrWhiteSpace(title))
-                throw new DomainException("Topic title is required.");
-
-            if (string.IsNullOrWhiteSpace(slug))
-                throw new DomainException("Topic slug is required.");
-        }
-
-        public static Topic Rehydrate(
-                                     Guid id,
-                                     string title,
-                                     string slug,
-                                     int displayOrder,
-                                     Guid? parentTopicId,
-                                     bool isActive,
-                                     Guid techId,
-                                     Guid createdBy,
-                                     DateTime createdUtc,
-                                     Guid? modifiedBy,
-                                     DateTime modifiedUtc)
+        public static Topic Create(Guid technologyId, string title, string slug, Guid? parentTopicId, int displayOrder, Guid userId, DateTime utcNow)
         {
             return new Topic
             {
-                Id = id,
+                Id = Guid.NewGuid(),
+                TechId = technologyId,
                 Title = title,
                 Slug = slug,
-                DisplayOrder = displayOrder,
                 ParentTopicId = parentTopicId,
-                IsActive = isActive,
-                TechId = techId,
-                CreatedBy = createdBy,
-                CreatedUtcDate = createdUtc,
-                LastModifiedBy = modifiedBy,
-                LastUtcModified = modifiedUtc
+                DisplayOrder = displayOrder,
+                IsActive = true,
+                CreatedBy = userId,
+                CreatedUtcDate = utcNow,
+                LastUtcModified = utcNow
             };
         }
-        public void RehydratePage(Page page)
+        public void Update(string title, string slug, int displayOrder, Guid userId, DateTime utcNow)
         {
+            Title = title;
+            Slug = slug;
+            DisplayOrder = displayOrder;
+            LastModifiedBy = userId;
+            LastUtcModified = utcNow;
+        }
+        public Page AddPage(string title, string slug, string summary, Guid createdBy, DateTime utcNow)
+        {
+            if (_pages.Any(p => p.Slug == slug))
+                throw new DomainException("Duplicate slug in topic.");
+
+            var page = Page.Create(
+                Id,
+                title,
+                slug,
+                summary,
+                createdBy,
+                utcNow);
+
             _pages.Add(page);
-        }
 
-        public void Deactivate(Guid modifiedBy, DateTime utcNow)
+            return page;
+        }
+        public void Rename(string title, Guid userId, DateTime utcNow)
         {
-            if (!IsActive)
-                throw new DomainException("Topic is already deactivated.");
-
-            IsActive = false;
-            SetModified(modifiedBy, utcNow);
+            Title = title;
+            LastModifiedBy = userId;
+            LastUtcModified = utcNow;
         }
-
+        public void Deactivate(Guid userId, DateTime utcNow)
+        {
+            IsActive = false;
+            LastModifiedBy = userId;
+            LastUtcModified = utcNow;
+        }
     }
 }
+
+
 
 
 

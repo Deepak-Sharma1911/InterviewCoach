@@ -1,7 +1,6 @@
 CREATE SCHEMA ic;
 
 go
-
 USE [InterviewCoachDB]
 GO
 
@@ -18,6 +17,7 @@ CREATE TABLE [ic].[Technology](
 	[Slug] [nvarchar](200) NOT NULL,
 	[DisplayOrder] [int] NOT NULL,
 	[IsActive] [bit] NOT NULL,
+    [RowVersion] rowversion NOT NULL,
 	[CreatedBy] [uniqueidentifier] NOT NULL,
 	[CreatedUtcDate] [datetime2](7) NOT NULL,
 	[LastModifiedBy] [uniqueidentifier] NULL,
@@ -29,19 +29,14 @@ CREATE TABLE [ic].[Technology](
 ) ON [PRIMARY]
 GO
 
-ALTER TABLE [ic].[Technology] ADD  DEFAULT (newid()) FOR [Id]
-GO
-
 ALTER TABLE [ic].[Technology] ADD  DEFAULT ((0)) FOR [DisplayOrder]
 GO
 
 ALTER TABLE [ic].[Technology] ADD  DEFAULT ((1)) FOR [IsActive]
-GO
+go
 
-ALTER TABLE [ic].[Technology] ADD  DEFAULT (sysutcdatetime()) FOR [CreatedUtcDate]
-GO
+CREATE UNIQUE INDEX index_name
+ON [ic].[Technology] ([Slug]);
 
-ALTER TABLE [ic].[Technology] ADD  DEFAULT (sysutcdatetime()) FOR [LastUtcModified]
-GO
 
 

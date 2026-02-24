@@ -11,13 +11,15 @@ GO
 CREATE TABLE [ic].[PageSections](
 	[Id] [uniqueidentifier] NOT NULL,
 	[PageId] [uniqueidentifier] NOT NULL,
-	[SectionType] [int] NOT NULL,
+	[SectionType] [nvarchar](20) NOT NULL,
 	[Title] [nvarchar](200) NOT NULL,
 	[Content] [nvarchar](max) NOT NULL,
 	[DisplayOrder] [int] NOT NULL,
+	[IsActive] [bit] NOT NULL,
+	[RowVersion] rowversion NOT NULL,
 	[CreatedBy] [uniqueidentifier] NOT NULL,
 	[CreatedUtcDate] [datetime2](7) NOT NULL,
-	[LastModifiedBy] [uniqueidentifier] NULL,
+	[LastModifiedBy] [uniqueidentifier]NOT  NULL,
 	[LastUtcModified] [datetime2](7) NOT NULL,
  CONSTRAINT [PK_PageSections] PRIMARY KEY CLUSTERED 
 (
@@ -26,18 +28,10 @@ CREATE TABLE [ic].[PageSections](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-ALTER TABLE [ic].[PageSections] ADD  DEFAULT (newid()) FOR [Id]
-GO
-
 ALTER TABLE [ic].[PageSections] ADD  DEFAULT ((0)) FOR [DisplayOrder]
 GO
-
-ALTER TABLE [ic].[PageSections] ADD  DEFAULT (sysutcdatetime()) FOR [CreatedUtcDate]
+ALTER TABLE [ic].[PageSections] ADD  DEFAULT ((1)) FOR [IsActive]
 GO
-
-ALTER TABLE [ic].[PageSections] ADD  DEFAULT (sysutcdatetime()) FOR [LastUtcModified]
-GO
-
 ALTER TABLE [ic].[PageSections]  WITH CHECK ADD  CONSTRAINT [FK_PageSections_Pages] FOREIGN KEY([PageId])
 REFERENCES [ic].[Pages] ([Id])
 ON DELETE CASCADE
@@ -46,11 +40,7 @@ GO
 ALTER TABLE [ic].[PageSections] CHECK CONSTRAINT [FK_PageSections_Pages]
 GO
 
-ALTER TABLE [ic].[PageSections]  WITH CHECK ADD  CONSTRAINT [FK_PageSections_SectionTypes] FOREIGN KEY([SectionType])
-REFERENCES [ic].[PageSectionTypes] ([Id])
-GO
 
-ALTER TABLE [ic].[PageSections] CHECK CONSTRAINT [FK_PageSections_SectionTypes]
-GO
-
+CREATE UNIQUE INDEX index_name
+ON [ic].[PageSections] ([PageId],[DisplayOrder]);
 

@@ -7,9 +7,9 @@ namespace InterviewCoach.Application.Feature.Technology.Queries.GetTechnologyByI
     public class GetTechnologyByIdQueryHandler : IQueryHandler<GetTechnologyByIdQuery, TechnologyDto>
     {
         private readonly ILogger<GetTechnologyByIdQueryHandler> _logger;
-        private readonly ITechnologyReadRepository _repository;
+        private readonly ITechnologyRepository _repository;
 
-        public GetTechnologyByIdQueryHandler(ILogger<GetTechnologyByIdQueryHandler> logger, ITechnologyReadRepository repository)
+        public GetTechnologyByIdQueryHandler(ILogger<GetTechnologyByIdQueryHandler> logger, ITechnologyRepository repository)
         {
             _logger = logger;
             _repository = repository;
