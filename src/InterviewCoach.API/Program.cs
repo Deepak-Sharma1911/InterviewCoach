@@ -1,6 +1,7 @@
 using InterviewCoach.API.Extensions;
 using InterviewCoach.Application;
 using InterviewCoach.Infrastructure.Persistence;
+using Scalar.AspNetCore;
 using Serilog;
 
 
@@ -21,13 +22,14 @@ namespace InterviewCoach.API
             builder.Services.AddPresentation();
             builder.Services.AddApplicationServices();
             builder.Services.AddPersistenceService(builder.Configuration);
-      
+
             WebApplication app = builder.Build();
 
 
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwaggerWithUI();
+                app.MapSwagger("/openapi/{documentName}.json");
+                app.MapScalarApiReference();
                 app.UseDeveloperExceptionPage();
             }
             app.UseHsts();
@@ -47,7 +49,7 @@ namespace InterviewCoach.API
             //app.UseAuthorization();
 
             app.MapControllers();
-           
+
             await app.RunAsync();
         }
     }
