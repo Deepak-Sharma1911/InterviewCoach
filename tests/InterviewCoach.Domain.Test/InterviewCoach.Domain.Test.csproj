@@ -11,9 +11,13 @@
 
   <ItemGroup>
 	  <PackageReference Include="coverlet.collector" />
-	  <PackageReference Include="Microsoft.NET.Test.Sdk"  />
+	  <PackageReference Include="Microsoft.NET.Test.Sdk" />
 	  <PackageReference Include="xunit" />
-	  <PackageReference Include="xunit.runner.visualstudio"  />
+	  <PackageReference Include="xunit.runner.visualstudio" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\InterviewCoach.Domain\InterviewCoach.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
