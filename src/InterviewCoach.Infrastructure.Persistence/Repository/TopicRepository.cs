@@ -27,10 +27,10 @@ namespace InterviewCoach.Infrastructure.Persistence.Repository
         {
             await _context.Topics.AddAsync(topic, token);
         }
-        public async Task<IReadOnlyList<TopicTreeItem>> GetRootTreeAsync(CancellationToken ct)
+        public async Task<IReadOnlyList<TopicTreeItem>> GetRootTreeAsync(Guid techId, CancellationToken ct)
         {
             return await _context.Topics.AsNoTracking()
-                                        .Where(t => t.ParentTopicId == null && t.IsActive)
+                                        .Where(t => t.ParentTopicId == null && t.IsActive && t.TechId == techId)
                                         .Select(x => new TopicTreeItem
                                         (
                                              x.Id,

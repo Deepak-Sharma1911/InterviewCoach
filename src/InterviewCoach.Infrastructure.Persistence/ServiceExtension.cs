@@ -34,7 +34,6 @@ namespace InterviewCoach.Infrastructure.Persistence
             services.AddScoped<ITechnologyRepository, TechnologyRepository>();
             services.AddScoped<ITopicRepository, TopicRepository>();
             services.AddScoped<ITopicRepository, TopicRepository>();
-
             return services;
         }
     }
