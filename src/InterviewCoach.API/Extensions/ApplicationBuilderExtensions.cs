@@ -5,7 +5,11 @@
         public static IApplicationBuilder UseSwaggerWithUI(this IApplicationBuilder builder)
         {
             builder.UseSwagger();
-            builder.UseSwaggerUI();
+            builder.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "InterviewCoach API v1");
+                c.RoutePrefix = string.Empty;
+            });
             return builder;
         }
     }

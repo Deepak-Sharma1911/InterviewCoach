@@ -19,22 +19,22 @@ namespace InterviewCoach.API
                     .ReadFrom.Services(services)
                     .Enrich.FromLogContext();
             });
-            builder.Services.AddPresentation();
+            builder.Services.AddPresentation(builder.Configuration);
             builder.Services.AddApplicationServices();
             builder.Services.AddPersistenceService(builder.Configuration);
 
             WebApplication app = builder.Build();
 
-
+            app.UseSwaggerWithUI();
             if (app.Environment.IsDevelopment())
             {
-                app.MapSwagger("/openapi/{documentName}.json");
-                app.MapScalarApiReference();
+                //app.MapSwagger("/openapi/{documentName}.json");
+                //app.MapScalarApiReference();
                 app.UseDeveloperExceptionPage();
             }
-            app.UseHsts();
-
-            app.UseHttpsRedirection();
+            // Remove or comment these two out — you don't have HTTPS cert on IIS yet
+            // app.UseHsts();
+            // app.UseHttpsRedirection();
 
             app.UseRequestContextLogging();
 
@@ -44,9 +44,18 @@ namespace InterviewCoach.API
 
             app.UseRouting();
 
-            //app.UseAuthentication();
+            app.UseAuthentication();
 
-            //app.UseAuthorization();
+            app.UseAuthorization();
+
+            // TEMPORARY — remove before going live
+            app.MapGet("/debug/env", () => new
+            {
+                Environment = app.Environment.EnvironmentName,
+                IsDevelopment = app.Environment.IsDevelopment(),
+                IsProduction = app.Environment.IsProduction(),
+                ASPNETCORE_ENVIRONMENT = System.Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
+            }).AllowAnonymous();
 
             app.MapControllers();
 
