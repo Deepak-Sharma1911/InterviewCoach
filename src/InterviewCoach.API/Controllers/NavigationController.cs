@@ -2,6 +2,7 @@
 using InterviewCoach.Application.Feature.Technology.Commands.DeleteTechnology;
 using InterviewCoach.Application.Feature.Technology.Queries.GetTechnologies;
 using InterviewCoach.Application.Feature.Technology.Queries.GetTechnologyById;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InterviewCoach.API.Controllers

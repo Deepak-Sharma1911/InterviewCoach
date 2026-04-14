@@ -1,0 +1,36 @@
+version: "3.9"
+services:
+  interviewcoach.api:
+    image: ${DOCKER_REGISTRY-}interviewcoachapi
+    build:
+      context: .
+      dockerfile: src/InterviewCoach.API/Dockerfile
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.3
+    container_name: keycloak
+    restart: always
+    command: start-dev --import-realm
+    depends_on:
+      keycloak-db:
+        condition: service_healthy
+    networks:
+      - keycloak-net
+  keycloak-db:
+    image: postgres:16-alpine
+    container_name: keycloak-db
+    restart: always
+    networks:
+      - keycloak-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  keycloak_db_data:
+    driver: local
+
+networks:
+  keycloak-net:
+    driver: bridge
