@@ -127,4 +127,7 @@ docker-compose logs -f        # Follow logs
 6. Content-netotiation.
 7. Gzip/Brocaoli compression.
 8. Unit Test and Integration Tests.
-8. CI/CD Setup using Github Action/Azure Devops.
+9. CI/CD Setup using Github Action/Azure Devops.
+10. Caching
+11. Rate Limiting 
+12. Versioning
