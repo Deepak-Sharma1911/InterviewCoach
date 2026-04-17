@@ -11,12 +11,10 @@ namespace InterviewCoach.API.Controllers
     /// Handles token issuance and refresh by proxying requests to Keycloak.
     /// Use this from Swagger UI to get a token, then click Authorize and paste it in.
     /// </summary>
-    [ApiController]
-    [Route("api/[controller]")]
     [AllowAnonymous]
     [Produces("application/json")]
     [Tags("Authentication")]
-    public class AuthController : ControllerBase
+    public class AuthController : BaseController
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly KeycloakOptions _options;
