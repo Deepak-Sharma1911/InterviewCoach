@@ -116,3 +116,18 @@ docker-compose down           # Stop (data preserved in volume)
 docker-compose down -v        # Stop + wipe all data
 docker-compose logs -f        # Follow logs
 ```
+
+## Features to be Added
+
+1. Rolebased Access
+2. UI Connectivity
+3. Result pattern
+4. Pagination
+5. Lazy & Eager Loding Concept.
+6. Content-netotiation.
+7. Gzip/Brocaoli compression.
+8. Unit Test and Integration Tests.
+9. CI/CD Setup using Github Action/Azure Devops.
+10. Caching
+11. Rate Limiting 
+12. Versioning
